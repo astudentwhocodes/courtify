@@ -2,7 +2,7 @@
   "name": "courtify",
   "version": "1.0.0",
   "description": "courtify",
-  "main": "server.js",
+  "main": "/server.js",
   "scripts": {
     "start": "node server.js",
     "clean": "echo 'No cleaning required'",
@@ -19,8 +19,5 @@
   "devDependencies": {
     "concurrently": "^7.0.0",
     "nodemon": "^2.0.15"
-  },
-  "bin" : {
-    "execute" : "server.js"
   }
 } 
