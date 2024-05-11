@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome to Courtify</title>
+<link rel="icon" type="image/x-icon" href="img/ballicon.ico">
+<link rel="stylesheet" type="text/css" href="styles.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap">
+</head>
+<body>
+
+<div class="container">
+    <div class="half" style="background-color: #FFDAB9;">
+        <div class="vertical-div">
+            <img src="img/courtify.png" alt="Courtify Logo">
+            <img src="img/court.png" alt="Court Image">
+        </div>
+    </div>
+    <div class="half" style="background-color: #fff5e6;">
+        <div class="login-form">
+            <h2 class="login-heading">Log In</h2>
+            <h1 class="welcome-heading">WELCOME!</h1>
+            <form id="loginForm">
+                <input type="text" id="email" placeholder="Email"> 
+                <input type="password" id="password" placeholder="Password">
+                <button type="submit" class="login-button">Login</button>
+            </form>
+            <p>New at Courtify? <a href="signup.html">Sign Up</a></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+    
+        var email = document.getElementById("email").value;
+        var password = document.getElementById("password").value;
+    
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://localhost:3001/login", true); 
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    localStorage.setItem('user_id', response.user_id); 
+                    window.location.href = "home.html";
+                    
+                } else {
+                    alert("Login failed. Please check your credentials."); 
+                }
+            }
+        };
+        var data = "email=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(password);
+        xhr.send(data);
+    });
+</script>
+
+</body>
+</html>

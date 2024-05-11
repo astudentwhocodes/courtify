@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up Page</title>
+<link rel="icon" type="image/x-icon" href="img/ballicon.ico">
+<link rel="stylesheet" type="text/css" href="styles.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap">
+</head>
+<body>
+
+<div class="container">
+    <div class="half" style="background-color: #FFDAB9;">
+        <!-- Content for the first half -->
+        <div class="vertical-div">
+            <img src="img/courtify.png" alt="Courtify Logo">
+            <img src="img/court.png" alt="Court Image">
+        </div>
+    </div>
+    <div class="half" style="background-color: #fff5e6;">
+        <!-- Content for the second half -->
+        <div class="login-form">
+            <h2 class="login-heading">Sign Up</h2>
+            <h1 class="welcome-heading">WELCOME!</h1>
+            <form id="signupForm">
+                <input type="text" id="username" placeholder="Username" required>
+                <input type="text" id="email" placeholder="Email" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <div>
+                    <input type="radio" id="customerRadio" name="role" value="customer" checked>
+                    <label for="customerRadio">Customer</label>
+                    <input type="radio" id="ownerRadio" name="role" value="owner">
+                    <label for="ownerRadio">Owner</label>
+                </div>
+                <button type="submit" id="signupButton" class="login-button">Sign Up</button>
+            </form>
+            <p id="signupStatus"></p> <!-- Add a paragraph to display sign-up status -->
+            <p>Already have an account? <a href="index.html">Login</a></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("signupForm").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent form submission
+    
+        // Get input values
+        var username = document.getElementById("username").value;
+        var email = document.getElementById("email").value;
+        var password = document.getElementById("password").value;
+        var role = document.querySelector('input[name="role"]:checked').value;
+
+        // Get current date
+        const today = new Date();
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+                            "July", "August", "September", "October", "November", "December"];
+        const monthIndex = today.getMonth();
+        const monthName = monthNames[monthIndex];
+        const day = String(today.getDate()).padStart(2, '0');
+        const year = today.getFullYear();
+        const joinDate = `${monthName} ${day} ${year}`;
+
+
+        // Send AJAX request to server
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://localhost:3001/signup", true); // Change URL to localhost and port 3000
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    // Response from server
+                    alert("Signup successful.");
+                    window.location.href = "index.html"; // Redirect to index.html after successful signup
+                } else {
+                    alert("Signup failed. Please try again."); // Display pop-up message for failed signup
+                }
+            }
+        };
+        var data = "username=" + encodeURIComponent(username) + "&email=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(password) + "&role=" + encodeURIComponent(role) + "&join_date=" + encodeURIComponent(joinDate);
+        xhr.send(data);
+    });
+</script>
+
+
+
+</body>
+</html>
