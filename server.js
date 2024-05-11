@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mysql = require('mysql');
+const path = require('path'); // Import the 'path' module
 
 // Import user routes
 const userRoutes = require('./config/user');
@@ -11,6 +12,9 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Create MySQL connection pool
 const pool = mysql.createPool({
