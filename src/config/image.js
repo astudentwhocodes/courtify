@@ -1,37 +1,46 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const path = require('path');
+const { Octokit } = require('@octokit/rest');
+
+// Initialize GitHub API client
+const octokit = new Octokit({
+  auth: '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', // Replace with your personal access token
+});
 
 // Define storage for uploaded images
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'img/courts'); // Destination folder for saving images
-    },
-    filename: function (req, file, cb) {
-        // Generate a unique filename with the prefix 'court' and timestamp
-        const filename = 'court' + Date.now() + path.extname(file.originalname); // Add file extension
-        cb(null, filename);
-    }
-});
+const storage = multer.memoryStorage();
 
 // Initialize multer upload with the configured storage
 const upload = multer({ storage: storage });
 
 // Define route for uploading image
-router.post('/saveImage', upload.single('courtImage'), (req, res) => {
+router.post('/saveImage', upload.single('courtImage'), async (req, res) => {
     // Check if file is uploaded successfully
     if (!req.file) {
         return res.status(400).json({ error: 'No image uploaded.' });
     }
 
-    // File uploaded successfully
-    const imagePath = req.file.filename; // Use the filename provided by multer
-    console.log('Image uploaded:', imagePath);
+    try {
+        // Upload image file to GitHub repository
+        const response = await octokit.repos.createOrUpdateFileContents({
+            owner: 'astudentwhocodes',
+            repo: 'courtify',
+            path: `./src/img/courts/${req.file.originalname}`, // Path where image will be uploaded
+            message: 'Upload image',
+            content: req.file.buffer.toString('base64'),
+        });
 
-    // You can save imagePath to the database or perform other operations here
+        console.log('Image uploaded to GitHub:', response.data.content);
 
-    return res.status(200).json({ message: 'Image saved successfully.', imagePath: imagePath });
+        // Respond with success message
+        return res.status(200).json({ message: 'Image saved successfully.' });
+    } catch (error) {
+        console.error('Error uploading image to GitHub:', error);
+
+        // Respond with error message
+        return res.status(500).json({ error: 'Failed to upload image to GitHub.' });
+    }
 });
 
 module.exports = router;
