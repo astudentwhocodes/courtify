@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Court</title>
+    <link rel="icon" type="image/x-icon" href="img/ballicon.ico">
+    <link rel="stylesheet" href="courtstyles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="left-div">
+            <img src="img/courtify.png" alt="Courtify Header" style="width: 100%;">
+            <ul class="navigation">
+                <li style="background-color: #f0680c;"><a href="home.html" class="home"><img src="img/home.png" alt="Home Image" style="width: 100%;"></a></li>
+                <li id="dashboardLink" style="display: none;"><a href="dashboard.html"><img src="img/dashboard.png" alt="Dashboard Image" style="width: 100%;"></a></li>
+                <li><a href="user_profile.html"><img src="img/userprofile.png" alt="User Profile Image" style="width: 100%;"></a></li>
+                <li id="courtlistingLink" style="display: none;"><a href="court_listing.html"><img src="img/courtlisting.png" alt="Court Listing Image" style="width: 100%;"></a></li>
+                <li id="addcourtLink" style="display: none;"><a href="add_court.html"><img src="img/addcourt.png" alt="Add Court Image" style="width: 100%;"></a></li>
+                <li id="courtbookingLink" style="display: none;"><a href="court_booking.html"><img src="img/courtbooking.png" alt="Court Booking Image" style="width: 100%;"></a></li>
+                <li id="customerdetailsLink" style="display: none;"><a href="customer_details.html"><img src="img/customerdetails.png" alt="Customer Details Image" style="width: 100%;"></a></li>
+                <li id="ownerdetailsLink" style="display: none;"><a href="owner_details.html"><img src="img/ownerdetails.png" alt="Owner Details Image" style="width: 100%;"></a></li>
+                <li id="courtdetailsLink" style="display: none;"><a href="court_details.html"><img src="img/courtdetails.png" alt="Court Details Image" style="width: 100%;"></a></li>
+                <li><a id="logout" href="index.html"><img src="img/logout.png" alt="Logout Image" style="width: 50%;"></a></li>
+            </ul>
+        </div>
+        <div class="right-div">
+            <div class="info-div">
+                <img id="courtPhoto" src="" alt="Court Photo" style="width: 500px; height: 300px;">
+                <h1 id="courtName"></h1>
+                <p id="courtAddress"></p>
+                <p id="courtAbout"></p>
+                <div class="owner-info">
+                    <img id="ownerPhoto" src="" alt="Owner Icon"> <!-- Replace path_to_icon with the actual path to your icon -->
+                    <div class="owner-na">
+                        <p id="ownerName"></p>
+                        <p id="ownerAddress" style="font-size: 10px;"></p>
+                    </div>
+                </div>
+                <p id="courtAvailability">Availability:</p>
+                <div id="timeList" class="time-list-open"></div>
+                <div id="timeList" class="time-list-closed"></div>
+            </div>
+            <div class="booking-div">
+                <div class="booking-time"></div>
+                <p><span id="courtPrice"></span> per hour</p>
+                <div class="time-selector">
+                    <label for="choose-time"><p id="courtBookingText">Booking Hour/s:</p></label>
+                    <button id="openModalBtn">Select Time</button>
+                </div>
+                <div class="booking-final">
+                    <div class="breaking-line"></div>
+                    <div class="booking-price">
+                        <div class="bp-left">
+                            <p>Total: <span class="price"></span></p>
+                        </div>
+                        <div class="bp-right">
+                            <p><span class="total-price"><span style="color: #ffb404;">₱0.00</span></span></p>
+                        </div>
+                    </div>
+                    <button class="book-button">Book</button>
+                    <button class="cancel-button" style="display: none;">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Select Time Slots</h2>
+            <div id="checkbox-list">
+                <div id="checkbox-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var user_id = localStorage.getItem('user_id');
+            var court_id = localStorage.getItem('court_id');
+            var price = 0;
+            var time_slots;
+
+            console.log(user_id);
+            console.log(court_id);
+
+            fetchUserInfo(user_id);
+            fetchCourtInfo(court_id);
+            fetchTimeInfo(court_id);
+            fetchBookingInfo(user_id, court_id);
+
+            function fetchBookingInfo(user_id, court_id) {
+                fetch(`https://courtify.onrender.com/book/info/${court_id}/${user_id}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        if (data.bookings && data.bookings.length > 0) {
+                            // If bookings exist and are not empty, hide the book-button and show the cancel-button
+                            document.querySelector('.book-button').style.display = 'none';
+                            document.querySelector('.cancel-button').style.display = 'block';
+                        } else {
+                            // If bookings are empty or don't exist, do nothing
+                            console.error('No bookings found or unexpected format of booking data');
+                        }
+                    })
+                    .catch(error => console.error('Error fetching booking info:', error));
+            }
+            
+            
+
+            function fetchUserInfo(user_id) {
+                fetch('https://courtify.onrender.com/userinfo/' + user_id) 
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.role === 'admin' || data.role === 'owner') {
+                            // If user is admin or owner, remove the book button
+                            var bookButton = document.querySelector('.book-button');
+                            if (bookButton) {
+                                bookButton.parentNode.removeChild(bookButton);
+                            }
+                        }
+        
+                        if (data.role === 'admin') {
+                            document.getElementById('dashboardLink').style.display = 'block';
+                            document.getElementById('customerdetailsLink').style.display = 'block';
+                            document.getElementById('ownerdetailsLink').style.display = 'block';
+                            document.getElementById('courtdetailsLink').style.display = 'block';
+                        }
+                        else if (data.role === 'owner') {
+                            document.getElementById('courtlistingLink').style.display = 'block';
+                            document.getElementById('addcourtLink').style.display = 'block';
+                        }
+                        else if (data.role === 'customer') {
+                            document.getElementById('courtbookingLink').style.display = 'block';
+                        }
+
+                    })
+                    .catch(error => console.error('Error fetching user info:', error));
+            }
+
+            function fetchOwnerInfo(user_id) {
+                fetch('https://courtify.onrender.com/userinfo/' + user_id) 
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('ownerPhoto').src = "/img/" + data.photo;
+                        document.getElementById('ownerName').innerText = data.username;
+                        document.getElementById('ownerAddress').innerText = data.address;
+                    })
+                    .catch(error => console.error('Error fetching user info:', error));
+            }
+
+
+            function fetchCourtInfo(court_id) {
+                fetch('https://courtify.onrender.com/courtinfo/court/' + court_id)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data); // Log court info data
+                        // Update DOM with court info
+                        document.getElementById('courtPhoto').src = "/img/courts/" + data.photo;
+                        document.getElementById('courtName').innerText = data.court_name;
+                        document.getElementById('courtAddress').innerText = data.address;
+                        document.getElementById('courtAbout').innerText = data.about;
+                        document.title = data.court_name;
+                        document.getElementById('courtPrice').innerText = "P" + data.price;
+
+                        fetchOwnerInfo(data.user_id);
+                    })
+                    .catch(error => console.error('Error fetching court info:', error));
+            }
+
+            function fetchTimeInfo(court_id) {
+                fetch('https://courtify.onrender.com/courtinfo/availability/' + court_id) 
+                    .then(response => response.json())
+                    .then(data => {
+                        // Filter data to include only objects where availability is 1
+                        displayTime(data);
+                        populateTimeSlots(data);
+                        console.log(data);
+                    })
+                    .catch(error => console.error('Error fetching user info:', error));
+            }
+
+            function displayTime(data) {
+                const openTimeListDiv = document.querySelector('.time-list-open');
+                const closedTimeListDiv = document.querySelector('.time-list-closed');
+            
+                // Clear any existing content in the time list divs
+                openTimeListDiv.innerHTML = '';
+                closedTimeListDiv.innerHTML = '';
+            
+                // Iterate through data and create time slots for each time slot
+                data.forEach(item => {
+                    const timeSlot = document.createElement('div');
+                    timeSlot.textContent = item.time_slot;
+                    timeSlot.classList.add('time-slot');
+            
+                    // Apply different class names based on availability
+                    if (item.availability === 1) {
+                        openTimeListDiv.appendChild(timeSlot); // Add time slot to open time list div
+                    } else {
+                        closedTimeListDiv.appendChild(timeSlot); // Add time slot to closed time list div
+                    }
+                });
+            }
+
+            function populateTimeSlots(data) {
+                const checkboxContainer = document.getElementById('checkbox-container');
+
+                // Clear existing checkboxes
+                checkboxContainer.innerHTML = '';
+
+                // Iterate through data and create checkboxes for each time slot
+                data.forEach(item => {
+                    if (item.availability === 1) {
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.name = 'time-slot';
+                        checkbox.value = item.time_slot;
+                        checkbox.id = 'time-slot-' + item.time_slot; // Unique ID for each checkbox
+                        const label = document.createElement('label');
+                        label.htmlFor = 'time-slot-' + item.time_slot;
+                        label.appendChild(document.createTextNode(item.time_slot));
+                        checkboxContainer.appendChild(checkbox);
+                        checkboxContainer.appendChild(label);
+
+                        // Add event listener to checkbox
+                        checkbox.addEventListener('change', function() {
+                            updateTotalPrice();
+                        });
+                    }
+                });
+            }
+
+            // Function to get selected time slots
+            function getSelectedTimeSlots() {
+                const checkboxes = document.querySelectorAll('input[name="time-slot"]:checked');
+                const selectedTimeSlots = [];
+                checkboxes.forEach(checkbox => {
+                    selectedTimeSlots.push(checkbox.value);
+                });
+                time_slots = selectedTimeSlots;
+                return selectedTimeSlots;
+            }
+
+            // Function to calculate the total price
+            function calculatePrice(selectedTimeSlots, pricePerHour) {
+                const numberOfSlots = selectedTimeSlots.length;
+                const totalPrice = numberOfSlots * pricePerHour;
+                price = totalPrice;
+                return totalPrice;
+            }
+
+            // Function to update total price based on selected time slots
+            function updateTotalPrice() {
+                const selectedTimeSlots = getSelectedTimeSlots();
+                const pricePerHour = parseInt(document.getElementById('courtPrice').innerText.replace('P', '')); // Get price per hour from UI
+                const totalPrice = calculatePrice(selectedTimeSlots, pricePerHour);
+                console.log("Total Price:", totalPrice); // Do whatever you need with the total price
+
+                // Update UI to display total price
+                var priceSpan = document.createElement('span');
+                priceSpan.style.color = '#ffb404'; // Set the color style
+                priceSpan.textContent = '₱' + totalPrice.toFixed(2); // Concatenate the currency symbol with the price value
+
+                // Get the element with the class 'total-price'
+                var totalPriceElement = document.querySelector('.total-price');
+
+                // Clear its contents
+                totalPriceElement.innerHTML = '';
+
+                // Append the price span to the total price element
+                totalPriceElement.appendChild(priceSpan);
+            }
+
+            document.querySelector('.book-button').addEventListener('click', async function(event) {
+                event.preventDefault(); // Prevent default form submission behavior
+            
+                // Get selected time slots (if applicable)
+                const selectedTimeSlots = getSelectedTimeSlots();
+                console.log("Selected Time Slots:", selectedTimeSlots);
+            
+                // Check if any time slots are selected
+                if (selectedTimeSlots.length === 0) {
+                    // If no time slots are selected, display an alert
+                    alert("Please select at least one time slot.");
+                    return; // Exit the function, booking process will not proceed
+                }
+            
+                const today = new Date();
+                const formattedDate = formatDate(today);
+            
+                try {
+                    // Send booking data to server
+                    const bookingResponse = await fetch('https://courtify.onrender.com/book', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: `user_id=${encodeURIComponent(user_id)}&court_id=${encodeURIComponent(court_id)}&booking_date=${encodeURIComponent(formattedDate)}&booking_price=${encodeURIComponent(price)}`
+                    });
+            
+                    // Check booking response status
+                    if (!bookingResponse.ok) {
+                        throw new Error('Booking failed. Please try again.');
+                    }
+            
+                    // Send booking data to server for pending booking
+                    const pendingResponse = await fetch('https://courtify.onrender.com/book/pending', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: `user_id=${encodeURIComponent(user_id)}&court_id=${encodeURIComponent(court_id)}&time_slots=${encodeURIComponent(selectedTimeSlots.join(','))}`
+                    });
+            
+                    // Check pending response status
+                    if (!pendingResponse.ok) {
+                        throw new Error('Booking failed. Please try again.');
+                    }
+            
+                    // If booking and pending booking are successful, display success message
+                    alert("Booking pending. Waiting for confirmation.");
+                    location.reload();
+            
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert("Booking failed. Please try again.");
+                }                
+            });
+            
+            document.querySelector('.cancel-button').addEventListener('click', async function(event) {
+                event.preventDefault();
+                    
+                    // Show a confirmation dialog
+                    var confirmation = confirm("Are you sure you want to cancel the booking?");
+                    if (confirmation) {
+                        // Make an HTTP DELETE request to the specified endpoint
+                        fetch(`https://courtify.onrender.com/book/delete/${court_id}`, {
+                            method: 'DELETE'
+                        })
+                        .then(response => {
+                            if (response.ok) {
+                                console.log(`Booking for court with ID ${court_id} canceled successfully`);
+                                location.reload();
+                            } else {
+                                console.error('Failed to cancel booking');
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                    }            
+            });
+            
+            // Function to format date as mm-dd-yy
+            function formatDate(date) {
+                const day = date.getDate();
+                const month = date.getMonth() + 1; // Months are zero indexed, so we add 1
+                const year = date.getFullYear() % 100; // Get last two digits of the year
+                return `${(month < 10 ? '0' : '') + month}-${(day < 10 ? '0' : '') + day}-${year}`;
+            }            
+
+            // Event listener for logout
+            document.getElementById('logout').addEventListener('click', function(event) {
+                // Prevent the default behavior of the link
+                event.preventDefault();
+
+                // Show a confirmation dialog
+                var confirmation = confirm("Are you sure you want to logout?");
+                if (confirmation) {
+                    // Clear localStorage
+                    localStorage.clear();
+                    
+                    // Redirect to the logout page
+                    window.location.href = "index.html";
+                }
+            });
+
+            // Get the modal
+            var modal = document.getElementById("myModal");
+
+            // Get the button that opens the modal
+            var btn = document.getElementById("openModalBtn");
+
+            // Get the <span> element that closes the modal
+            var span = document.getElementsByClassName("close")[0];
+
+            // When the user clicks the button, open the modal
+            btn.onclick = function() {
+                modal.style.display = "block";
+            }
+
+            // When the user clicks on <span> (x), close the modal
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -8,6 +8,10 @@ const path = require('path');
 const userRoutes = require('./src/config/user.js');
 const userInfoRoutes = require('./src/config/user_info.js');
 const courtInfoRoutes = require('./src/config/court_info.js');
+const courtRoutes = require('./src/config/court.js');
+const dashboardInfoRoutes = require('./src/config/dashboard_info.js');
+const bookCourtRoutes = require('./src/config/book.js');
+const imageRoutes = require('./src/config/image.js'); // Import image routes
 
 const app = express();
 
@@ -43,6 +47,10 @@ app.get('/', (req, res) => {
 app.use('/api', userRoutes); // Assuming user routes start with '/api'
 app.use('/userinfo', userInfoRoutes); // Assuming user routes start with '/api'
 app.use('/courtinfo', courtInfoRoutes); // Assuming user routes start with '/api'
+app.use('/book', bookCourtRoutes);
+app.use('/dashboardinfo', dashboardInfoRoutes);
+app.use('/image', imageRoutes);
+app.use('/court', courtRoutes);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {

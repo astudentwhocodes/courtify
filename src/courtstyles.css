@@ -1,0 +1,282 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #fff5e6;
+}
+.container {
+    display: flex;
+    height: 100%;
+}
+.left-div {
+    flex: 1;
+    background-color: #ffebcf;
+    margin: 20px;
+    border: 1px solid black;
+    text-align: center;
+    border-top-left-radius: 20px;
+    overflow: hidden;
+    margin-right: 0px;
+}
+.right-div {
+    flex: 4;
+    background-color: #fff5e6;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    margin: 20px;
+    margin-left: 0px;
+    border: 1px solid black;
+    border-left: 0;
+}
+.header {
+    background-color: #fff5e6;
+    color: black;
+    padding: 10px;
+    padding-left: 0px;
+    font-size: 35px;
+}
+.body {
+    margin-top: 20px;
+}
+.navigation {
+    list-style: none;
+    padding: 0;
+    display: inline-block; 
+    border-radius: 10px;
+}
+.navigation li {
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+.info-div {
+    flex: 3;
+    margin-right: 10px;
+    border-radius: 20px;
+    padding: 20px;
+    overflow: auto; /* Make it scrollable */
+}
+
+#courtPhoto {
+    width: 500px;
+    height: 300px;
+    border-radius: 20px; /* Add curves */
+    overflow: hidden; /* Ensure image stays within curved border */
+}
+#courtName {
+    font-size: 30px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+#courtAddress {
+    margin-top: 0px;
+    font-weight: bold; /* Make the court address bold */
+}
+
+#courtAbout {
+    color: #666; /* Make the about text a light dark gray */
+}
+
+#courtAvailability {
+    font-weight: bold;
+}
+
+#courtPrice {
+    font-size: 30px;
+    font-weight: bolder;
+}
+
+#courtBookingText {
+    font-size: 20px;
+    font-weight: bolder;
+}
+
+.owner-info {
+    display: flex;
+    align-items: center;
+}
+
+.owner-info img {
+    width: 35px; /* Adjust icon size */
+    height: 35px;
+    margin-right: 10px; /* Adjust spacing between icon and text */
+}
+.owner-na {
+    height: 35px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Hide any content that overflows */
+}
+
+.owner-na p {
+    margin: 0; /* Remove default margin */
+    overflow-wrap: break-word; /* Wrap long words to next line */
+}
+
+.time-list-open,
+.time-list-closed {
+display: flex;
+flex-wrap: wrap;
+}
+
+.time-slot {
+    width: 100px;
+    height: 25px;
+    background-color: #ccc;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+}
+
+.time-list-open .time-slot {
+    background-color: #f2f2f2;
+}
+
+.time-list-closed .time-slot {
+    background-color: rgba(128, 128, 128, 0.3); /* Adjust the last value (0.3) to set the transparency */
+    color: rgba(255, 255, 255, 0.5); /* Adjust the last value (0.5) to set the opacity */
+    filter: saturate(0.5); /* Desaturate the color */
+}
+
+.booking-div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border: 1px solid black;
+    background-color: #ffebcf;
+    width: 300px; /* Adjust width as needed */
+    margin: auto; /* Center the booking div */
+}
+
+.booking-div p {
+    margin-bottom: 10px;
+}
+
+.time-selector {
+    display: flex;
+    justify-content: space-between;
+}
+
+.choose-time select {
+    width: 100%; /* Make select boxes take full width of parent */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.price {
+    font-weight: bold;
+}
+
+.book-button,
+.cancel-button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #f0680c;
+    color: white;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+.booking-final {
+    margin-top: 100px;
+}
+.breaking-line {
+    height: 2px; /* Adjust the height as needed */
+    background-color: black; /* Color of the line */
+    margin: 10px 0; /* Margin to provide spacing */
+    margin-bottom: 25px;
+}
+.booking-price {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.bp-left {
+    flex: 1; /* Takes up half of the space */
+}
+
+.bp-right {
+    flex: 1; /* Takes up half of the space */
+    text-align: right; /* Aligns the content to the right */
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.4); /* Black with opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #ffebcf;
+    margin: 0 auto; /* Center the modal horizontally */
+    margin-top: 10%; /* Adjust vertical position */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 15%; /* Set width of modal */
+    max-height: 300px; /* Set maximum height */
+    overflow-y: auto; /* Enable vertical scroll if content exceeds max-height */
+}
+
+/* Scrollable checkbox list */
+#checkbox-list {
+    max-height: calc(100% - 50px); /* Adjust height for scrollbar */
+    overflow-y: auto; /* Enable vertical scroll if content exceeds max-height */
+}
+
+/* Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Add this style for the checkbox container */
+#checkbox-container {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Add this style for the labels */
+label {
+    margin-bottom: 5px; /* Add some space between checkboxes */
+    display: flex;
+    align-items: center; /* Align labels vertically with checkboxes */
+}
+
+
+#openModalBtn {
+    background-color: #f0680c; /* Orange color for the button */
+    color: white; /* White text color */
+    width: 100px; /* Adjust width as needed */
+    height: 40px; /* Adjust height as needed */
+    border-radius: 15px; /* Add border-radius for curved corners */
+    line-height: 40px; /* Set line height equal to the height of the box to center vertically */
+    cursor: pointer; /* Add cursor pointer on hover */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Add shadow */
+    margin-left: auto; /* Align the button to the right */
+    margin-top: 10px; /* Add some top margin */
+}
