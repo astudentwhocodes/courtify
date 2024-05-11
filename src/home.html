@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="icon" type="image/x-icon" href="/img/ballicon.ico">
+    <link rel="stylesheet" href="homestyles.css">        
+</head>
+<body>
+    <div class="container">
+        <div class="left-div">
+            <img src="img/courtify.png" alt="Courtify Header" style="width: 100%;">
+            <ul class="navigation">
+                <li style="background-color: #f0680c"><a href="home.html" class="home"><img src="img/home.png" alt="Home Image" style="width: 100%;"></a></li>
+                <li id="dashboardLink" style="display: none;"><a href="dashboard.html"><img src="img/dashboard.png" alt="Dashboard Image" style="width: 100%;"></a></li>
+                <li><a href="user_profile.html"><img src="img/userprofile.png" alt="User Profile Image" style="width: 100%;"></a></li>
+                <li id="courtlistingLink" style="display: none;"><a href="court_listing.html"><img src="img/courtlisting.png" alt="Court Listing Image" style="width: 100%;"></a></li>
+                <li id="addcourtLink" style="display: none;"><a href="add_court.html"><img src="img/addcourt.png" alt="Add Court Image" style="width: 100%;"></a></li>
+                <li id="courtbookingLink" style="display: none;"><a href="court_booking.html"><img src="img/courtbooking.png" alt="Court Booking Image" style="width: 100%;"></a></li>
+                <li id="customerdetailsLink" style="display: none;"><a href="customer_details.html"><img src="img/customerdetails.png" alt="Customer Details Image" style="width: 100%;"></a></li>
+                <li id="ownerdetailsLink" style="display: none;"><a href="owner_details.html"><img src="img/ownerdetails.png" alt="Owner Details Image" style="width: 100%;"></a></li>
+                <li id="courtdetailsLink" style="display: none;"><a href="court_details.html"><img src="img/courtdetails.png" alt="Court Details Image" style="width: 100%;"></a></li>
+                <li><a id="logout" href="index.html"><img src="img/logout.png" alt="Logout Image" style="width: 50%;"></a></li>
+            </ul>
+        </div>
+        <div class="right-div">
+            <div class="header" id="header">
+                <h2>Hello, Guest!</h2>
+            </div>
+            <div class="body">
+                <div id="courtList" class="court-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var user_id = localStorage.getItem('user_id');
+
+            fetchUserInfo(user_id);
+        
+            function fetchUserInfo(user_id) {
+                fetch('https://courtify.onrender.com/userinfo/' + user_id)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.role === 'admin') {
+                            document.getElementById('dashboardLink').style.display = 'block';
+                            document.getElementById('customerdetailsLink').style.display = 'block';
+                            document.getElementById('ownerdetailsLink').style.display = 'block';
+                            document.getElementById('courtdetailsLink').style.display = 'block';
+                        }
+                        else if (data.role === 'owner') {
+                            document.getElementById('courtlistingLink').style.display = 'block';
+                            document.getElementById('addcourtLink').style.display = 'block';
+                        }
+                        else if (data.role === 'customer') {
+                            document.getElementById('courtbookingLink').style.display = 'block';
+                        }
+                        document.getElementById('header').innerHTML = `<h2>Hello, ${data.username}!</h2>`;
+                        
+                        userRole = data.role;
+                    })
+                    .catch(error => console.error('Error fetching user info:', error));
+        
+                    fetch('https://courtify.onrender.com/courtinfo')
+                    .then(response => response.json())
+                    .then(data => {
+                        const courtList = document.getElementById('courtList');
+                        courtList.innerHTML = '';
+                        
+                        data.forEach(court => {
+                            const courtDiv = document.createElement('div');
+                            courtDiv.classList.add('court-card');
+                            courtDiv.innerHTML = `
+                                <img src="img/courts/${court.photo || court.id + '.png'}" alt="${court.court_name}" data-court-id="${court.court_id}">
+                                <div class="court-details">
+                                    <p class="address">${court.address}</p>
+                                    <p class="price">₱${court.price}</p>
+                                </div>
+                            `;
+                            courtList.appendChild(courtDiv);
+                        });
+        
+                        // Add event listener to all court card images
+                        const courtCards = document.querySelectorAll('.court-card img');
+                        courtCards.forEach(courtImg => {
+                            courtImg.addEventListener('click', function() {
+                                const courtId = this.dataset.courtId; // Retrieve court ID from data attribute
+                                localStorage.setItem('court_id', courtId); // Store court ID in localStorage
+                                window.location.href = "court.html"; // Redirect to book_court.html
+                            });
+                        });
+                    })
+                    .catch(error => console.error('Error fetching court information:', error));
+            }
+
+            document.getElementById('logout').addEventListener('click', function(event) {
+                // Prevent the default behavior of the link
+                event.preventDefault();
+    
+                // Show a confirmation dialog
+                var confirmation = confirm("Are you sure you want to logout?");
+                if (confirmation) {
+                    // Clear localStorage
+                    localStorage.clear();
+                    
+                    // Redirect to the logout page
+                    window.location.href = "index.html";
+                }
+            });
+        });
+    </script>
+</body>
+</html>

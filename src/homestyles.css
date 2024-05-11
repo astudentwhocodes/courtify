@@ -1,0 +1,107 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #fff5e6;
+}
+.container {
+    display: flex;
+    height: 100%;
+}
+.left-div {
+    flex: 1;
+    background-color: #ffebcf;
+    margin: 20px;
+    border: 1px solid black;
+    text-align: center;
+    border-top-left-radius: 20px; /* Adjust the value as needed for the curve */
+    overflow: hidden; /* This ensures that the border-radius applies correctly */
+    margin-right: 0px;
+}
+.header {
+    background-color: #fff5e6;
+    color: black;
+    padding: 10px;
+    padding-left: 0px;
+    height: 50px; /* Set a fixed height for the header */
+    display: flex; /* Use flexbox for alignment */
+    align-items: center; /* Center items vertically */
+}
+.body {
+    margin-top: 20px;
+}
+.navigation {
+    list-style: none;
+    padding: 0;
+    display: inline-block; 
+    border-radius: 10px;
+}
+.navigation li {
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+.right-div {
+    flex: 4;
+    background-color: #fff5e6;
+    padding: 20px; /* Add padding around the content */
+    border: 1px solid black;
+    border-left: 0;
+    margin: 20px;
+    margin-left: 0px;
+    overflow: hidden; /* Ensure that content outside the right div is hidden */
+}
+
+/* Ensure flexbox layout for the court list */
+.court-list {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping to form multiple rows */
+    justify-content: center; /* Center items horizontally */
+    gap: 20px; /* Add space between items */
+}
+
+/* Style for each court card */
+.court-card {
+    width: calc(33% - 20px); /* Set the width of each card (33% - 20px margin) */
+    margin-bottom: 20px;
+    border-radius: 15px; /* Add border-radius to create a rounded corner */
+    max-width: 300px;
+    overflow: hidden; /* This ensures that the border-radius applies correctly */
+    padding: 20px;
+    margin-bottom: 50px;
+}
+
+/* Style for the court image */
+.court-card img {
+    width: 100%; /* Make the image fill the width of its container */
+    height: 80%; /* Make the height of the image fill the container */
+    object-fit: cover; /* Maintain aspect ratio and cover the entire space */
+    border-radius: 15px; /* Rounded corners only on top */
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1); /* Add a slight shadow for depth */
+}
+
+/* Style for the court details */
+.court-details {
+    padding: 10px;
+    background-color: #fff5e6;
+}
+
+.right-div .body {
+    overflow-y: auto; /* Make the content scrollable vertically */
+    max-height: calc(100vh - 110px); /* Set the maximum height to prevent overflowing */
+}
+
+/* Style for the address */
+.court-details p.address {
+    font-weight: bold; /* Make the address text bold */
+    font-size: 15px;
+    margin-top: 0px;
+    margin-bottom: 5px;
+}
+
+/* Style for the price */
+.court-details p.price {
+    color: gold; /* Set the color of the Peso sign to gold */
+    font-weight: bold; /* Make the price text bold */
+    font-size: 12px;
+    margin-top: 0px;
+}

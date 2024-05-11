@@ -6,6 +6,8 @@ const path = require('path');
 
 // Import user routes
 const userRoutes = require('./src/config/user.js');
+const userInfoRoutes = require('./src/config/user_info.js');
+const courtInfoRoutes = require('./src/config/court_info.js');
 
 const app = express();
 
@@ -39,6 +41,8 @@ app.get('/', (req, res) => {
 
 // Use user routes
 app.use('/api', userRoutes); // Assuming user routes start with '/api'
+app.use('/userinfo', userInfoRoutes); // Assuming user routes start with '/api'
+app.use('/courtinfo', courtInfoRoutes); // Assuming user routes start with '/api'
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
