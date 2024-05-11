@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const mysql = require('mysql');
 const path = require('path'); 
+const fs = require('fs'); // Import the 'fs' module
 
 // Import user routes
 const userRoutes = require('./config/user');
@@ -32,9 +33,16 @@ app.use((req, res, next) => {
     next();
 });
 
-// Serve index.html on GET request to /
+// Handle render route
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', './src/index.html'));
+    const indexPath = path.join(__dirname, '/src/index.html');
+    fs.access(indexPath, fs.constants.F_OK, (err) => {
+        if (err) {
+            res.send('Welcome to Courtify'); // If index.html doesn't exist
+        } else {
+            res.sendFile(indexPath); // If index.html exists, send it
+        }
+    });
 });
 
 // Use user routes
