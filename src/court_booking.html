@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Court Booking</title>
+    <link rel="icon" type="image/x-icon" href="img/ballicon.ico">
+    <style>
+        /* CSS styles */
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #fff5e6;
+        }
+        .container {
+            display: flex;
+            height: 100%;
+        }
+        .left-div {
+            flex: 1;
+            background-color: #ffebcf;
+            margin: 20px;
+            border: 1px solid black;
+            text-align: center;
+            border-top-left-radius: 20px; /* Adjust the value as needed for the curve */
+            overflow: hidden; /* This ensures that the border-radius applies correctly */
+            margin-right: 0px;
+        }
+        .right-div {
+            flex: 4;
+            background-color: #fff5e6;
+            padding: 20px; /* Add padding around the content */
+            border: 1px solid black;
+            border-left: 0;
+            margin: 20px;
+            margin-left: 0px;
+            overflow: hidden; /* Ensure that content outside the right div is hidden */
+        }
+        .header {
+            background-color: #fff5e6;
+            color: black;
+            padding: 10px;
+            padding-left: 0px;
+            height: 50px; /* Set a fixed height for the header */
+            display: flex; /* Use flexbox for alignment */
+            align-items: center; /* Center items vertically */
+        }
+        .body {
+            margin-top: 20px;
+        }
+        .navigation {
+            list-style: none;
+            padding: 0;
+            display: inline-block; 
+            border-radius: 10px;
+        }
+        .navigation li {
+            margin-bottom: 10px;
+            border-radius: 10px;
+        }
+        .booking-item {
+            border: 1px solid black; /* Add border style */
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            background-color:  #ffebcf;
+            color: black;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-bottom: 10px;
+        }
+        
+        .booking-item:hover {
+            background-color: #f8d5a3;
+        }
+        
+        .cancel-btn {
+            background-color: #f0680c;
+            color: white;
+            width: 150px;
+            height: 40px;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease; /* Smooth transition for background color change */
+        }
+        
+        .cancel-btn:hover {
+            background-color: #d05404; /* Darker background color on hover */
+        }
+        
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-div">
+            <!-- Content for left div -->
+            <img src="img/courtify.png" alt="Courtify Header" style="width: 100%;">
+            <ul class="navigation">
+                <li><a href="home.html" class="home"><img src="img/home.png" alt="Home Image" style="width: 100%;"></a></li>
+                <!-- Dashboard link only for admin -->
+                <li id="dashboardLink" style="display: none;"><a href="dashboard.html"><img src="img/dashboard.png" alt="Dashboard Image" style="width: 100%;"></a></li>
+                <!-- User Profile link -->
+                <li><a href="user_profile.html"><img src="img/userprofile.png" alt="User Profile Image" style="width: 100%;"></a></li>
+                <li id="courtlistingLink" style="display: none;"><a href="court_listing.html"><img src="img/courtlisting.png" alt="Court Listing Image" style="width: 100%;"></a></li>
+                <li id="addcourtLink" style="display: none;"><a href="add_court.html"><img src="img/addcourt.png" alt="Add Court Image" style="width: 100%;"></a></li>
+                <li id="courtbookingLink" style="display: none; background-color: #f0680c;"><a href="court_booking.html"><img src="img/courtbooking.png" alt="Court Booking Image" style="width: 100%;"></a></li>
+                <li id="customerdetailsLink" style="display: none;"><a href="customer_details.html"><img src="img/customerdetails.png" alt="Customer Details Image" style="width: 100%;"></a></li>
+                <li id="ownerdetailsLink" style="display: none;"><a href="owner_details.html"><img src="img/ownerdetails.png" alt="Owner Details Image" style="width: 100%;"></a></li>
+                <li id="courtdetailsLink" style="display: none;"><a href="court_details.html"><img src="img/courtdetails.png" alt="Court Details Image" style="width: 100%;"></a></li>
+                <li><a id="logout" href="index.html"><img src="img/logout.png" alt="Logout Image" style="width: 50%;"></a></li>
+            </ul>
+        </div>
+        <div class="right-div">
+            <div class="header" id="header">
+                <h2>Court Booking</h2>
+            </div>
+            <div class="body">
+                <div class="booking-list"></div>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var user_id = localStorage.getItem('user_id');
+            var court_id;
+        
+            fetchUserInfo(user_id);
+            getBooking(user_id);
+        
+            function fetchUserInfo(user_id) {
+                fetch('https://courtify.onrender.com/userinfo/' + user_id)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.role === 'admin') {
+                            document.getElementById('dashboardLink').style.display = 'block';
+                            document.getElementById('customerdetailsLink').style.display = 'block';
+                            document.getElementById('ownerdetailsLink').style.display = 'block';
+                            document.getElementById('courtdetailsLink').style.display = 'block';
+                        }
+                        else if (data.role === 'owner') {
+                            document.getElementById('courtlistingLink').style.display = 'block';
+                            document.getElementById('addcourtLink').style.display = 'block';
+                        }
+                        else if (data.role === 'customer') {
+                            document.getElementById('courtbookingLink').style.display = 'block';
+                        }
+        
+                    })
+                    .catch(error => console.error('Error fetching user info:', error));
+            }
+        
+            function getBooking(user_id) {
+                fetch('https://courtify.onrender.com/book/info/' + user_id)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Check the structure of data
+                        console.log(data);
+                        // Display booking data if it's in the expected format
+                        if (Array.isArray(data.bookings)) {
+                            displayBookingData(data.bookings); // Access the 'bookings' array
+                        } else {
+                            console.error('Error: Unexpected format of booking data');
+                        }
+                    })
+                    .catch(error => console.error('Error fetching booking info:', error));
+            }
+            
+            
+        
+            function displayBookingData(bookingData) {
+                var bookingListDiv = document.querySelector('.booking-list');
+                // Clear existing content
+                bookingListDiv.innerHTML = '';
+                // Loop through each booking and display it
+                bookingData.forEach(booking => {
+                    var bookingItem = document.createElement('div');
+                    court_id = booking.court_id;
+                    console.log(court_id);
+                    bookingItem.classList.add('booking-item');
+                    
+                    // Determine the status text based on the status value
+                    var statusText = '';
+                    if (booking.status === 0) {
+                        statusText = 'Pending';
+                    } else if (booking.status === 1) {
+                        statusText = 'Booked';
+                    } else {
+                        statusText = 'Unknown'; // Handle other status values if needed
+                    }
+                    
+                    bookingItem.innerHTML = `
+                        <p style="font-weight: bold;">Booking ID:</p> ${booking.booking_id}
+                        <p style="font-weight: bold;">Booking Date:</p> ${booking.booking_date}
+                        <p style="font-weight: bold;">Status:</p> ${statusText}
+                        <p style="font-weight: bold;">Price:</p> ₱${booking.booking_price}
+                        <button class="cancel-btn" data-court-id="${court_id}" ${booking.status === 1 ? 'style="display: none;"' : ''}>Cancel</button>
+                    `;
+            
+                    bookingListDiv.appendChild(bookingItem);
+                });
+            }
+            
+            
+            document.querySelector('.booking-list').addEventListener('click', function(event) {
+                if (event.target.classList.contains('cancel-btn')) {
+                    // Prevent the default behavior of the button
+                    event.preventDefault();
+                    
+                    // Retrieve the court_id from the data attribute
+                    var court_id = event.target.dataset.courtId;
+                    
+                    // Show a confirmation dialog
+                    var confirmation = confirm("Are you sure you want to cancel the booking?");
+                    if (confirmation) {
+                        // Make an HTTP DELETE request to the specified endpoint
+                        fetch(`https://courtify.onrender.com/book/delete/${court_id}`, {
+                            method: 'DELETE'
+                        })
+                        .then(response => {
+                            if (response.ok) {
+                                console.log(`Booking for court with ID ${court_id} canceled successfully`);
+                                location.reload();
+                            } else {
+                                console.error('Failed to cancel booking');
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                    }
+                }
+            });
+            
+            
+            
+            
+        
+            document.getElementById('logout').addEventListener('click', function(event) {
+                // Prevent the default behavior of the link
+                event.preventDefault();
+        
+                // Show a confirmation dialog
+                var confirmation = confirm("Are you sure you want to logout?");
+                if (confirmation) {
+                    // Clear localStorage
+                    localStorage.clear();
+                    
+                    // Redirect to the logout page
+                    window.location.href = "index.html";
+                }
+            });
+        });
+        
+    </script>
+    
+</body>
+</html>
