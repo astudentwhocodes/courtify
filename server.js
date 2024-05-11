@@ -5,7 +5,7 @@ const mysql = require('mysql');
 const path = require('path'); 
 
 // Import user routes
-const userRoutes = require('./config/user');
+const userRoutes = require('config/user.js');
 
 const app = express();
 
