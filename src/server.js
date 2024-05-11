@@ -6,7 +6,7 @@ const path = require('path');
 const fs = require('fs'); // Import the 'fs' module
 
 // Import user routes
-const userRoutes = require('./root/config/user');
+const userRoutes = require('./config/user');
 
 const app = express();
 
