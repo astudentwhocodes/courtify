@@ -1,0 +1,305 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #fff5e6;
+}
+
+.container {
+    display: flex;
+    height: 100%;
+}
+
+.left-div {
+    flex: 1;
+    background-color: #ffebcf;
+    margin: 20px;
+    border: 1px solid black;
+    text-align: center;
+    border-top-left-radius: 20px; /* Adjust the value as needed for the curve */
+    overflow: hidden; /* This ensures that the border-radius applies correctly */
+    margin-right: 0px;
+}
+
+.header {
+    background-color: #fff5e6;
+    color: black;
+    padding: 10px;
+    padding-left: 0px;
+    height: 50px; /* Set a fixed height for the header */
+    display: flex; /* Use flexbox for alignment */
+    align-items: center; /* Center items vertically */
+}
+
+.body {
+    margin-top: 20px;
+}
+
+.navigation {
+    list-style: none;
+    padding: 0;
+    display: inline-block; 
+    border-radius: 10px;
+}
+
+.navigation li {
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+
+.right-div {
+    flex: 4;
+    background-color: #fff5e6;
+    padding: 20px; /* Add padding around the content */
+    border: 1px solid black;
+    border-left: 0;
+    margin: 20px;
+    margin-left: 0px;
+    overflow: auto;
+}
+
+/* Court list container */
+#courtList {
+    display: flex; /* Change display to flex */
+    overflow-x: auto; /* Enable horizontal scrolling */
+    overflow-y: hidden; /* Hide vertical scrollbar */
+    max-width: 100%; /* Ensure the content doesn't exceed the container width */
+}
+
+/* Court list styles */
+.court-list {
+    display: inline-block; /* Display as inline block to prevent stretching */
+    padding-bottom: 20px; /* Add some bottom padding to ensure last card is fully visible */
+}
+
+/* Court card styles */
+.court-card {
+    flex: 0 0 auto; /* Ensure cards don't grow or shrink */
+    width: calc(33% - 20px); /* Set the width of each card (33% - 20px margin) */
+    margin-bottom: 20px;
+    border-radius: 15px; /* Add border-radius to create a rounded corner */
+    max-width: 300px;
+    overflow: hidden; /* This ensures that the border-radius applies correctly */
+    padding: 20px;
+    margin-right: 20px; /* Add some margin to create space between cards */
+    vertical-align: top; /* Align cards to the top */
+}
+
+/* Remove margin from the last court card */
+.court-card:last-child {
+    margin-right: 0;
+}
+
+/* Court image styles */
+.court-card img {
+    width: 70%; /* Make the image fill the width of its container */
+    height: 60%; /* Make the height of the image fill the container */
+    object-fit: cover; /* Maintain aspect ratio and cover the entire space */
+    border-radius: 15px; /* Rounded corners only on top */
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1); /* Add a slight shadow for depth */
+}
+
+/* Court details styles */
+.court-details {
+    padding: 10px;
+    background-color: #fff5e6;
+}
+
+/* Address styles */
+.court-details p.address {
+    font-weight: bold; /* Make the address text bold */
+    font-size: 15px;
+    margin-top: 0px;
+    margin-bottom: 5px;
+}
+
+/* Price styles */
+.court-details p.price {
+    color: gold; /* Set the color of the Peso sign to gold */
+    font-weight: bold; /* Make the price text bold */
+    font-size: 12px;
+    margin-top: 0px;
+}
+
+/* Styles for the button boxes */
+.open-box {
+    background-color: #f2f2f2; /* White color for open slots */
+    width: 100px; /* Adjust width as needed */
+    height: 40px; /* Adjust height as needed */
+    border-radius: 15px; /* Add border-radius for curved corners */
+    display: inline-block;
+    margin-right: 5px; /* Add some margin for spacing */
+    text-align: center; /* Center the text horizontally */
+    line-height: 40px; /* Set line height equal to the height of the box to center vertically */
+}
+
+.closed-box {
+    background-color: #808080; /* Gray color for closed or booked slots */
+    width: 100px; /* Adjust width as needed */
+    height: 40px; /* Adjust height as needed */
+    border-radius: 15px; /* Add border-radius for curved corners */
+    display: inline-block;
+    margin-right: 5px; /* Add some margin for spacing */
+    text-align: center; /* Center the text horizontally */
+    line-height: 40px; /* Set line height equal to the height of the box to center vertically */
+}
+
+.pending-box {
+    background-color: #ffeccc; /* Gray color for closed or booked slots */
+    width: 100px; /* Adjust width as needed */
+    height: 40px; /* Adjust height as needed */
+    border-radius: 15px; /* Add border-radius for curved corners */
+    display: inline-block;
+    margin-right: 5px; /* Add some margin for spacing */
+    text-align: center; /* Center the text horizontally */
+    line-height: 40px; /* Set line height equal to the height of the box to center vertically */
+}
+
+.booked-box {
+    background-color: #f0680c; /* Orange color for booked slots */
+    width: 100px; /* Adjust width as needed */
+    height: 40px; /* Adjust height as needed */
+    border-radius: 15px; /* Add border-radius for curved corners */
+    display: inline-block;
+    margin-right: 5px; /* Add some margin for spacing */
+    text-align: center; /* Center the text horizontally */
+    line-height: 40px; /* Set line height equal to the height of the box to center vertically */
+}
+
+/* Center time slots and buttons */
+.time-slots {
+    display: flex;
+    justify-content: space-between; /* Distribute items evenly along the main axis */
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 0 10px; /* Adjust padding to space out the items */
+}
+
+/* Styles for the morning time slots */
+.morning-slots {
+    float: left;
+    width: 50%;
+}
+
+/* Styles for the afternoon time slots */
+.afternoon-slots {
+    float: right;
+    width: 50%;
+}
+
+.time-slot {
+    text-align: center;
+    margin-bottom: 10px;
+    width: calc(100% - 20px);
+}
+
+/* Styles for the button boxes */
+.open-box, .closed-box, .pending-box, .booked-box {
+    text-align: center; /* Center the text horizontally */
+    line-height: 40px; /* Set line height equal to the height of the box to center vertically */
+    width: 80px; /* Adjust width as needed */
+    height: 40px; /* Adjust height as needed */
+    border-radius: 20px; /* Add border-radius for curved corners */
+    display: inline-block;
+    margin: 5px; /* Adjust margin to space out the buttons */
+}
+
+.slot-divider-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slot-divider {
+    height: 0.5px;
+    width: 35%;
+    background-color: black;
+}
+
+.slot-divider-space {
+    width: 10%; /* Adjust the width of the space as needed */
+}
+
+.court-image {
+    width: 200px; /* Adjust the width of the image */
+    margin-right: 20px; /* Add some margin to the right of the image */
+}
+
+.court-info {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center horizontally */
+    text-align: left; /* Center text */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 0px 4px rgba(0, 0, 0, 0.1); /* Slight shadow */
+    padding: 10px; /* Add padding */
+    margin-bottom: 25px;
+}
+
+.back-to-court-button {
+    background-color: #f0680c; /* Orange color for the button */
+    color: white; /* White text color */
+    width: 150px; /* Adjust width as needed */
+    height: 40px; /* Adjust height as needed */
+    border-radius: 15px; /* Add border-radius for curved corners */
+    text-align: center; /* Center the text horizontally */
+    line-height: 40px; /* Set line height equal to the height of the box to center vertically */
+    cursor: pointer; /* Add cursor pointer on hover */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Add shadow */
+    margin-left: auto; /* Align the button to the right */
+    margin-top: 10px; /* Add some top margin */
+    margin-right: 25px;
+}
+
+.booking-item {
+    border: 1px solid black; /* Add border style */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color:  #ffebcf;
+    color: black;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 10px;
+}
+
+.booking-item:hover {
+    background-color: #f8d5a3;
+}
+
+.decline-btn, .accept-btn, .info-btn {
+    background-color: #f0680c;
+    color: white;
+    width: 70px;
+    height: 40px;
+    border-radius: 15px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s ease; /* Smooth transition for background color change */
+}
+
+.decline-btn:hover, .accept-btn:hover, .info-btn:hover {
+    background-color: #d05404; /* Darker background color on hover */
+}
+
+
+.line-container {
+    display: flex;
+    justify-content: center; /* Centers the line horizontally */
+}
+
+.line {
+    height: 1px;
+    width: 100%; /* Adjust width as needed */
+    background-color: black; /* Change color as needed */
+}
+
+#customer-img {
+    width: 35px; /* Adjust icon size */
+    height: 35px;
+    margin-right: 10px; /* Adjust spacing between icon and text */
+}

@@ -16,8 +16,8 @@ router.post('/addcourt', async (req, res) => {
     const address = req.body.address;
     const price = req.body.price;
     const userId = req.body.user_id;
-    const about = req.body.about; // Extract about from request body
-    const photo = req.body.photo; // Extract photo from request body
+    const about = req.body.about;
+    const photo = req.body.photo;
 
     if (!courtName || !address || !price || !userId || !photo) {
         return res.status(400).json({ error: 'Court name, address, price, user ID, and photo are required.' });

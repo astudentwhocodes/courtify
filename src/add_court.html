@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Court</title>
+    <link rel="icon" type="image/x-icon" href="img/ballicon.ico">
+    <link rel="stylesheet" href="addcourtstyles.css">     
+</head>
+<body>
+    <div class="container">
+        <div class="left-div">
+            <!-- Content for left div -->
+            <img src="img/courtify.png" alt="Courtify Header" style="width: 100%;">
+            <ul class="navigation">
+                <li><a href="home.html" class="home"><img src="img/home.png" alt="Home Image" style="width: 100%;"></a></li>
+                <!-- Dashboard link only for admin -->
+                <li id="dashboardLink" style="display: none;"><a href="dashboard.html"><img src="img/dashboard.png" alt="Dashboard Image" style="width: 100%;"></a></li>
+                <!-- User Profile link -->
+                <li><a href="user_profile.html"><img src="img/userprofile.png" alt="User Profile Image" style="width: 100%;"></a></li>
+                <li id="courtlistingLink" style="display: none;"><a href="court_listing.html"><img src="img/courtlisting.png" alt="Court Listing Image" style="width: 100%;"></a></li>
+                <li id="addcourtLink" style="display: none; background-color: #f0680c;"><a href="add_court.html"><img src="img/addcourt.png" alt="Add Court Image" style="width: 100%;"></a></li>
+                <li id="courtbookingLink" style="display: none;"><a href="court_booking.html"><img src="img/courtbooking.png" alt="Court Booking Image" style="width: 100%;"></a></li>
+                <li id="customerdetailsLink" style="display: none;"><a href="customer_details.html"><img src="img/customerdetails.png" alt="Customer Details Image" style="width: 100%;"></a></li>
+                <li id="ownerdetailsLink" style="display: none;"><a href="owner_details.html"><img src="img/ownerdetails.png" alt="Owner Details Image" style="width: 100%;"></a></li>
+                <li id="courtdetailsLink" style="display: none;"><a href="court_details.html"><img src="img/courtdetails.png" alt="Court Details Image" style="width: 100%;"></a></li>
+                <li><a id="logout" href="index.html"><img src="img/logout.png" alt="Logout Image" style="width: 50%;"></a></li>
+            </ul>
+        </div>
+        <div class="right-div">
+            <div class="image-container">
+                <!-- Content for image div -->
+                <img id="court-image" src="img/courts/default.png" alt="Court Image" style="width: 400px; margin-bottom: 20px;"><br>
+                <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                <button id="uploadButton" class="submit-button">Upload Image</button>
+            </div>
+            <div class="form-container">
+                <!-- Content for form div -->
+                <h2>Add Court</h2>
+                <!-- Form for adding court details and availability -->
+                <form id="addCourtAndAvailabilityForm">
+                    <!-- Court details fields -->
+                    <label for="courtName">Court Name:</label><br>
+                    <input type="text" id="courtName" name="courtName" placeholder="Enter court name" required><br>
+                    <label for="courtAddress">Court Address:</label><br>
+                    <input type="text" id="courtAddress" name="courtAddress" placeholder="Enter court address" required><br>
+                    <label for="courtPrice">Court Price:</label><br>
+                    <input type="text" id="courtPrice" name="courtPrice" placeholder="Enter price" required><br>
+                    <!-- About field -->
+                    <label for="about">About:</label><br>
+                    <textarea id="about" name="about" rows="4" cols="50" class="about" placeholder="Add court description"></textarea><br>
+                    <!-- From and To fields -->
+                    <div class="from-to">
+                        <div>
+                            <label for="fromTime">From:</label>
+                            <select id="fromTime" name="fromTime">
+                                <option value="07am">07am</option>
+                                <option value="08am">08am</option>
+                                <option value="09am">09am</option>
+                                <option value="10am">10am</option>
+                                <option value="11am">11am</option>
+                                <option value="12pm">12pm</option>
+                                <option value="01pm">01pm</option>
+                                <option value="02pm">02pm</option>
+                                <option value="03pm">03pm</option>
+                                <option value="04pm">04pm</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="toTime">To:</label>
+                            <select id="toTime" name="toTime">
+                                <option value="08am">08am</option>
+                                <option value="09am">09am</option>
+                                <option value="10am">10am</option>
+                                <option value="11am">11am</option>
+                                <option value="12pm">12pm</option>
+                                <option value="01pm">01pm</option>
+                                <option value="02pm">02pm</option>
+                                <option value="03pm">03pm</option>
+                                <option value="04pm">04pm</option>
+                                <option value="05pm">05pm</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Submit button -->
+                    <button type="submit" class="submit-button">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Retrieve user_id from local storage
+            var user_id = localStorage.getItem('user_id');
+    
+            // Fetch user role and username from the server
+            fetchUserInfo(user_id);
+    
+            function fetchUserInfo(user_id) {
+                fetch('https://courtify.onrender.com/userinfo/' + user_id) // Assuming your server endpoint is /userinfo/:user_id
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.role === 'admin') {
+                            document.getElementById('dashboardLink').style.display = 'block';
+                            document.getElementById('customerdetailsLink').style.display = 'block';
+                            document.getElementById('ownerdetailsLink').style.display = 'block';
+                            document.getElementById('courtdetailsLink').style.display = 'block';
+                        }
+                        else if (data.role === 'owner') {
+                            document.getElementById('courtlistingLink').style.display = 'block';
+                            document.getElementById('addcourtLink').style.display = 'block';
+                        }
+                        else if (data.role === 'customer') {
+                            document.getElementById('courtbookingLink').style.display = 'block';
+                        }
+                    })
+                    .catch(error => console.error('Error fetching user info:', error));
+            }
+            document.getElementById('logout').addEventListener('click', function(event) {
+                // Prevent the default behavior of the link
+                event.preventDefault();
+    
+                // Show a confirmation dialog
+                var confirmation = confirm("Are you sure you want to logout?");
+                if (confirmation) {
+                    // Clear localStorage
+                    localStorage.clear();
+                    
+                    // Redirect to the logout page
+                    window.location.href = "index.html";
+                }
+            });
+        });
+    
+        document.addEventListener("DOMContentLoaded", function() {
+            // Function to handle click event on the uploadButton
+            document.getElementById('uploadButton').addEventListener('click', function() {
+                // Trigger click event on file input
+                document.getElementById('fileInput').click();
+            });
+    
+            // Add event listener to handle file selection
+            document.getElementById('fileInput').addEventListener('change', function(event) {
+                // Get the selected file
+                var file = event.target.files[0];
+    
+                // Check if a file is selected
+                if (file) {
+                    // Create a FileReader object
+                    var reader = new FileReader();
+    
+                    // Set up the FileReader to read the file as a data URL
+                    reader.readAsDataURL(file);
+    
+                    // When the file is loaded
+                    reader.onload = function() {
+                        // Set the image source to the data URL
+                        document.getElementById('court-image').src = reader.result;
+                    };
+                }
+            });
+    
+            // Function to handle form submission
+            document.getElementById('addCourtAndAvailabilityForm').addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent form submission
+                
+                // Get form data for court details
+                var courtName = document.getElementById('courtName').value;
+                var user_id = localStorage.getItem('user_id'); // Retrieve user_id from local storage
+                var courtAddress = document.getElementById('courtAddress').value;
+                var courtPrice = document.getElementById('courtPrice').value;
+                var courtId = ""; // Define a variable to store the court ID
+                var about = document.getElementById('about').value; // Get the about field value
+                
+                // Save the image and then submit the form
+                saveImage().then(filename => {
+                    console.log(filename); // Move the console.log statement here
+                    // Prepare data for court details submission
+                    var courtData = "court_name=" + encodeURIComponent(courtName) + "&user_id=" + encodeURIComponent(user_id) + "&address=" + encodeURIComponent(courtAddress) + "&price=" + encodeURIComponent(courtPrice) + "&about=" + encodeURIComponent(about) + "&photo=" + encodeURIComponent(filename);
+                    
+                    // Send AJAX request to add court details
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", "https://courtify.onrender.com/court/addcourt", true);
+                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === 4) {
+                            if (xhr.status === 200) {
+                                // Court details added successfully, now handle availability
+                                courtId = JSON.parse(xhr.responseText).court_id; // Get the court ID from the response
+                                
+                                // Handle time slots and add availability
+                                var fromTime = document.getElementById('fromTime').value;
+                                var toTime = document.getElementById('toTime').value;
+                                var currentFromTime = fromTime;
+                                var currentToTime;
+                                var timeSlotsArray = [];
+                                while (currentFromTime !== toTime) {
+                                    currentToTime = incrementTime(currentFromTime);
+                                    timeSlotsArray.push(currentFromTime + '-' + currentToTime);
+                                    currentFromTime = currentToTime;
+                                }
+                                
+                                // Prepare data for availability submission
+                                var availabilityData = new URLSearchParams(); // Create URLSearchParams object
+                                timeSlotsArray.forEach(function(timeSlot) {
+                                    availabilityData.append('time_slots[]', timeSlot); // Append each time slot to the form data
+                                });
+                                availabilityData.append('court_id', courtId); // Append the court ID to the form data
+                                
+                                // Send AJAX request to add availability
+                                var xhr2 = new XMLHttpRequest();
+                                xhr2.open("POST", "https://courtify.onrender.com/court/addavailability", true);
+                                xhr2.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                                xhr2.onreadystatechange = function() {
+                                    if (xhr2.readyState === 4) {
+                                        if (xhr2.status === 200) {
+                                            // Availability added successfully
+                                            alert("Availability added successfully");
+                                            // Uncheck all checkboxes
+                                            var checkboxes = document.querySelectorAll('input[name="timeSlots[]"]');
+                                            checkboxes.forEach(function(checkbox) {
+                                                checkbox.checked = false;
+                                            });
+                                        } else {
+                                            alert("Failed to add availability. Please try again.");
+                                        }
+                                    }
+                                };
+                                xhr2.send(availabilityData.toString()); // Send the form data as a string
+                            } else {
+                                alert("Failed to add court details. Please try again.");
+                            }
+                        }
+                    };
+                    xhr.send(courtData);
+                }).catch(error => {
+                    console.error('Error saving image:', error);
+                    // Optionally, you can display an error message to the user
+                });
+                
+            });
+        });
+    
+        // Function to increment time by one hour
+        function incrementTime(time) {
+            var hour = parseInt(time.slice(0, 2));
+            var ampm = time.slice(2);
+            if (hour === 11 && ampm === "pm") {
+                ampm = "am";
+            } else if (hour === 11 && ampm === "am") {
+                ampm = "pm";
+            }
+            hour = (hour % 12) + 1;
+            if (hour < 10) {
+                hour = "0" + hour;
+            }
+            return hour + ampm;
+        }
+    
+        // Function to save the image
+        function saveImage() {
+            // Get the file input element
+            var fileInput = document.getElementById('fileInput');
+    
+            // Get the selected file
+            var file = fileInput.files[0];
+    
+            // Check if a file is selected
+            if (file) {
+                // Generate a unique filename with timestamp to avoid overwriting existing files
+                var filename = 'court' + Date.now() + '.png'; // Filename with .png extension
+                // Create a FormData object
+                var formData = new FormData();
+                formData.append('courtImage', file, filename); // Append the filename to the FormData
+    
+                // Send a POST request to save the image
+                return fetch('https://courtify.onrender.com/image/saveImage', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Image saved successfully, parse response as JSON
+                        return response.json(); // Parse response as JSON
+                    } else {
+                        // Image failed to save
+                        throw new Error('Failed to save image');
+                    }
+                })
+                .then(data => {
+                    // Return the generated filename
+                    return data.imagePath; // Return the imagePath from the response
+                });
+            } else {
+                // No file selected
+                alert("Please upload an image first.");
+            }
+        }
+    </script>
+    
+</body>
+</html>

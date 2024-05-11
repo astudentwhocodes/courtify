@@ -1,0 +1,150 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #fff5e6;
+}
+.container {
+    display: flex;
+    height: 100%;
+}
+.left-div {
+    flex: 1;
+    background-color: #ffebcf;
+    margin: 20px;
+    border: 1px solid black;
+    text-align: center;
+    border-top-left-radius: 20px; /* Adjust the value as needed for the curve */
+    overflow: hidden; /* This ensures that the border-radius applies correctly */
+    margin-right: 0px;
+}
+.right-div {
+    flex: 4;
+    background-color: #fff5e6;
+    padding: 20px;
+    margin: 20px;
+    margin-left: 0px;
+    border: 1px solid black;
+    display: flex;
+    justify-content: space-between; /* Distribute space between child elements */
+    align-items: center; /* Center content vertically */
+}
+
+.image-container, .form-container {
+    width: 48%; /* Take up almost half of the available space */
+    padding: 20px; /* Add padding for content spacing */
+    text-align: center; /* Center content horizontally */
+}
+
+.image-container img {
+    width: 350px; /* Increased image size */
+    margin-bottom: 20px; /* Increased margin bottom for spacing */
+}
+
+.form-container {
+    background-color: #ffeccc; /* Light gray background */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Add shadow */
+    max-width: 400px; /* Limit maximum width */
+    margin-left: auto; /* Center horizontally */
+    margin-right: auto; /* Center horizontally */
+}
+
+.form-container form {
+    padding: 20px; /* Add padding inside form */
+    text-align: left; /* Align form content to the left */
+    width: 100%; /* Stretch textarea to the end */
+}
+
+.form-container h2 {
+    margin-bottom: 20px; /* Add spacing below heading */
+}
+
+.form-container .about {
+    width: calc(100% - 20px); /* Stretch textarea to the end and remove extra space */
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+.form-container .submit-button, #uploadButton {
+    width: calc(100% - 20px); /* Stretch the buttons to the end and remove extra space */
+    background-color: #f0680c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 15px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 20px; /* Add margin bottom for spacing */
+}
+
+.form-container input[type="text"],
+.form-container textarea,
+.form-container select {
+    width: calc(100% - 20px); /* Stretch input fields to the end and remove extra space */
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+.form-container .from-to {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.form-container .from-to > div {
+    flex: 1; /* Each div takes up equal space */
+    margin-right: 10px; /* Add space between "from" and "to" divs */
+}
+
+.form-container .from-to label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-container .submit-button:hover, #uploadButton:hover {
+    background-color: #d95e0c;
+}
+
+.header {
+    background-color: #fff5e6;
+    color: black;
+    padding: 10px;
+    padding-left: 0px;
+    font-size: 35px;
+}
+.body {
+    margin-top: 20px;
+}
+.navigation {
+    list-style: none;
+    padding: 0;
+    display: inline-block; 
+    border-radius: 10px;
+}
+.navigation li {
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+.submit-button, #uploadButton {
+    width: 300px; /* Set the width of the button to 300px */
+    background-color: #f0680c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 15px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 20px; /* Add margin bottom for spacing */
+}

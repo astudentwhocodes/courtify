@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Court Listing</title>
+    <link rel="icon" type="image/x-icon" href="img/ballicon.ico">
+    <link rel="stylesheet" href="courtlistingstyles.css">        
+</head>
+<body>
+    <div class="container">
+        <div class="left-div">
+            <!-- Content for left div -->
+            <img src="img/courtify.png" alt="Courtify Header" style="width: 100%;">
+            <ul class="navigation">
+                <li><a href="home.html" class="home"><img src="img/home.png" alt="Home Image" style="width: 100%;"></a></li>
+                
+                <li id="dashboardLink" style="display: none;"><a href="dashboard.html"><img src="img/dashboard.png" alt="Dashboard Image" style="width: 100%;"></a></li>
+                
+                <li><a href="user_profile.html"><img src="img/userprofile.png" alt="User Profile Image" style="width: 100%;"></a></li>
+                <li id="courtlistingLink" style="display: none; background-color: #f0680c;"><a href="court_listing.html"><img src="img/courtlisting.png" alt="Court Listing Image" style="width: 100%;"></a></li>
+                <li id="addcourtLink" style="display: none;"><a href="add_court.html"><img src="img/addcourt.png" alt="Add Court Image" style="width: 100%;"></a></li>
+                <li id="courtbookingLink" style="display: none;"><a href="court_booking.html"><img src="img/courtbooking.png" alt="Court Booking Image" style="width: 100%;"></a></li>
+                <li id="customerdetailsLink" style="display: none;"><a href="customer_details.html"><img src="img/customerdetails.png" alt="Customer Details Image" style="width: 100%;"></a></li>
+                <li id="ownerdetailsLink" style="display: none;"><a href="owner_details.html"><img src="img/ownerdetails.png" alt="Owner Details Image" style="width: 100%;"></a></li>
+                <li id="courtdetailsLink" style="display: none;"><a href="court_details.html"><img src="img/courtdetails.png" alt="Court Details Image" style="width: 100%;"></a></li>
+                <li><a id="logout" href="index.html"><img src="img/logout.png" alt="Logout Image" style="width: 50%;"></a></li>
+            </ul>
+        </div>
+        <div class="right-div">
+            <div id="bodyContent" class="body">
+                <div id="header" class="header">
+                    <h2>Court Listing</h2> <!-- Initially set to "Guest" -->
+                </div>
+                <div id="courtList" class="court-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        
+        function displayCourtDetails(court) {
+            fetchAvailabilityData(court.court_id)
+                .then(availabilityData => {
+                    // Create an array of all time slots
+                    const allTimeSlots = [
+                        '07am-08am', '08am-09am', '09am-10am', '10am-11am', '11am-12pm', 
+                        '12pm-01pm', '01pm-02pm', '02pm-03pm', '03pm-04pm', '04pm-05pm'
+                    ];
+    
+                    // Display detailed information about the clicked court
+                    var bodyContent = document.getElementById('bodyContent');
+                    bodyContent.innerHTML = `
+                    <div class="court-details-container">
+                        <div class="court-info">
+                            <img src="img/courts/${court.photo || court.id + '.png'}" alt="${court.court_name}" class="court-image">
+                            <div class="court-text">
+                                <h2 style="color:#f0680c;">${court.court_name}</h2>
+                                <p><strong>Address:</strong> ${court.address}</p>
+                                <p><strong>Price:</strong> ₱${court.price}</p>
+                            </div>
+                            <button class="back-to-court-button" onclick="backToCourtList()">Go Back</button>
+                        </div>
+                        <!-- Add more details here as needed -->
+                        <div class="time-slots">
+                            <div class="morning-slots">
+                                ${allTimeSlots.slice(0, 5).map(slot => {
+                                    // Find availability status for the slot
+                                    const slotAvailability = availabilityData.find(data => data.time_slot === slot);
+                                    // Determine button properties based on availability
+                                    let buttonText, buttonClass;
+                                    if (slotAvailability) {
+                                        if (slotAvailability.availability === 3) {
+                                            buttonText = 'BOOKED';
+                                            buttonClass = 'booked-box'; // Change class for booked slots
+                                        } else if (slotAvailability.availability === 2) {
+                                            buttonText = 'PENDING';
+                                            buttonClass = 'pending-box'; // Change class for pending slots
+                                        } else {
+                                            buttonText = 'OPEN';
+                                            buttonClass = 'open-box'; // Change class for open slots
+                                        }
+                                    } else {
+                                        buttonText = 'CLOSED';
+                                        buttonClass = 'closed-box'; // Change class for closed slots
+                                    }
+                                                                     
+                                    return `
+                                        <div class="time-slot">
+                                            <span>${slot}</span>
+                                            <div class="${buttonClass}">${buttonText}</div>
+                                        </div>
+                                    `;
+                                }).join(' ')}
+                            </div>
+                            <div class="afternoon-slots">
+                                ${allTimeSlots.slice(5).map(slot => {
+                                    // Find availability status for the slot
+                                    const slotAvailability = availabilityData.find(data => data.time_slot === slot);
+                                    // Determine button properties based on availability
+                                    let buttonText, buttonClass;
+                                    if (slotAvailability) {
+                                        if (slotAvailability.availability === 2) {
+                                            buttonText = 'BOOKED';
+                                            buttonClass = 'booked-box'; // Change class for booked slots
+                                        } else {
+                                            buttonText = 'OPEN';
+                                            buttonClass = 'open-box'; // Change class for open slots
+                                        }
+                                    } else {
+                                        buttonText = 'CLOSED';
+                                        buttonClass = 'closed-box'; // Change class for closed slots
+                                    }
+                                    return `
+                                        <div class="time-slot">
+                                            <span>${slot}</span>
+                                            <div class="${buttonClass}">${buttonText}</div>
+                                        </div>
+                                    `;
+                                }).join(' ')}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="line-container">
+                        <div class="line"></div>
+                    </div><br>
+                    <h2>Booking:</h2>
+                    <div class="booking-list"></div>
+                `;
+    
+                })
+                .catch(error => console.error('Error fetching court availability:', error));
+        }
+        
+        
+        function fetchAvailabilityData(courtId) {
+            // Fetch court availability data for the specified court ID
+            return fetch(`https://courtify.onrender.com/courtinfo/availability/${courtId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json(); // Return response as JSON
+                })
+                .then(data => {
+                    return data; // Return the availability data
+                })
+                .catch(error => {
+                    console.error('Error fetching court availability:', error);
+                    return null; // Return null in case of error
+                });
+        }
+        
+        function backToCourtList() {
+            // Fetch court listing again and replace the court details with court list
+            window.location.reload();
+        }
+        
+        document.addEventListener("DOMContentLoaded", async function() {
+            // Retrieve user_id from local storage
+            var user_id = localStorage.getItem('user_id');
+            await fetchUserInfo(user_id);
+    
+            async function declineBooking(court_id, user_id) {
+                console.log("decline")
+                console.log("courtid: "+court_id+", userid: "+user_id)
+            }
+    
+            async function acceptBooking(court_id, user_id) {
+                console.log("accept")
+                console.log("courtid: "+court_id+", userid: "+user_id)
+            }
+            
+        
+            function fetchCustomerInfo(user_id) {
+                return fetch('https://courtify.onrender.com/userinfo/' + user_id)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        return data; // Return all customer information
+                    })
+                    .catch(error => {
+                        console.error('Error fetching user info:', error);
+                        throw error;
+                    });
+            }
+        
+            async function displayBookingData(bookingData) {
+                // Ensure bookingListDiv is not null
+                var bookingListDiv = document.querySelector('.booking-list');
+                bookingListDiv.innerHTML = '';
+                if (!bookingListDiv) {
+                    console.error('Error: Booking list container not found');
+                    return; // Exit the function if the container is not found
+                }
+                bookingListDiv.innerHTML = ''; // Clear existing content
+            
+                // Loop through each booking and display it
+                for (const booking of bookingData) {
+                    var bookingItem = document.createElement('div');
+                    var court_id = booking.court_id;
+                    bookingItem.classList.add('booking-item');
+            
+                    try {
+                        const customerInfo = await fetchCustomerInfo(booking.user_id);
+                        
+                        // Determine the status text based on the status value
+                        var statusText = '';
+                        if (booking.status === 0) {
+                            statusText = 'Pending';
+                        } else if (booking.status === 1) {
+                            statusText = 'Booked';
+                        } else {
+                            statusText = 'Unknown'; // Handle other status values if needed
+                        }
+                        
+                        // Update HTML with customer information
+                        bookingItem.innerHTML = `
+                            <img id="customer-img" src="/img/${customerInfo.photo}" alt="Customer Photo"></img>
+                            <p style="font-weight: bold;">Name:</p> ${customerInfo.username}
+                            <p style="font-weight: bold;">Booking ID:</p> ${booking.booking_id}
+                            <p style="font-weight: bold;">Booking Date:</p> ${booking.booking_date}
+                            <p style="font-weight: bold;">Status:</p> ${statusText}
+                            <p style="font-weight: bold;">Price:</p> ₱${booking.booking_price}
+                            <button class="info-btn" data-court-id="${court_id}">Info</button>
+                            <button class="accept-btn" data-court-id="${court_id}" ${booking.status === 1 ? 'style="display: none;"' : ''}>Accept</button>
+                            <button class="decline-btn" data-court-id="${court_id}" ${booking.status === 1 ? 'style="display: none;"' : ''}>Decline</button>
+                        `;
+                        bookingListDiv.appendChild(bookingItem);
+            
+                        document.querySelector('.booking-list').addEventListener('click', function(event) {
+                            if (event.target.classList.contains('decline-btn')) {
+                                // Prevent the default behavior of the button
+                                event.preventDefault();
+                                
+                                var court_id = event.target.dataset.courtId;
+                                declineBooking(court_id, customerInfo.user_id);
+                            }
+                            if (event.target.classList.contains('accept-btn')) {
+                                // Prevent the default behavior of the button
+                                event.preventDefault();
+                                
+                                var court_id = event.target.dataset.courtId;
+                                acceptBooking(court_id, customerInfo.user_id);
+                            }
+                        });
+                        
+                    } catch (error) {
+                        console.error('Error fetching customer info for booking:', error);
+                    }
+                }
+            }
+            
+        
+            function fetchCourtInfo(user_id) {
+                fetch('https://courtify.onrender.com/courtinfo/' + user_id)
+                    .then(response => response.json())
+                    .then(courtData => {
+                        const courtList = document.getElementById('courtList');
+                        courtList.innerHTML = ''; // Clear existing court list
+            
+                        // Iterate through the court data and create divs for each court
+                        courtData.forEach(court => {
+                            const courtDiv = document.createElement('div');
+                            court_id = court.court_id;
+                            courtDiv.classList.add('court-card');
+                            courtDiv.innerHTML = `
+                                <img src="img/courts/${court.photo || court.id + '.png'}" alt="${court.court_name}" data-court-id="${court.court_id}">
+                                <div class="court-details">
+                                    <p class="address">${court.court_name}</p>
+                                    <p class="address">${court.address}</p>
+                                    <p class="price">₱${court.price}</p>
+                                </div>
+                            `;
+                            // Add event listener to display court details when clicked
+                            courtDiv.addEventListener('click', function() {
+                                // Pass the courtId to displayCourtDetails function
+                                displayCourtDetails(court);
+                                fetchAvailabilityData(court.court_id);
+                                fetchBookingInfo(court.court_id);
+                            });
+                            courtList.appendChild(courtDiv);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching court information:', error));
+            }
+    
+            function fetchUserInfo(user_id) {
+                fetch('https://courtify.onrender.com/userinfo/' + user_id)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Check if user info is available
+                        if (data) {
+                            if (data.role === 'admin') {
+                                document.getElementById('dashboardLink').style.display = 'block';
+                                document.getElementById('customerdetailsLink').style.display = 'block';
+                                document.getElementById('ownerdetailsLink').style.display = 'block';
+                                document.getElementById('courtdetailsLink').style.display = 'block';
+                            } else if (data.role === 'owner') {
+                                document.getElementById('courtlistingLink').style.display = 'block';
+                                document.getElementById('addcourtLink').style.display = 'block';
+                            } else if (data.role === 'customer') {
+                                document.getElementById('courtbookingLink').style.display = 'block';
+                            }
+                            // Set the user role for further use
+                            var userRole = data.role;
+    
+                            // Fetch courts corresponding to the user ID
+                            fetchCourtInfo(user_id);
+                        } else {
+                            console.error('User info not available');
+                        }
+                    })
+                    .catch(error => console.error('Error fetching user info:', error));
+            }
+    
+            function fetchBookingInfo(court_id) {
+                fetch('https://courtify.onrender.com/book/' + court_id)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Check the structure of data
+                        // Display booking data if it's in the expected format
+                        if (Array.isArray(data.bookings)) {
+                            displayBookingData(data.bookings);
+                        } else {
+                            console.error('Error: Unexpected format of booking data');
+                        }
+                    })
+                    .catch(error => console.error('Error fetching booking info:', error));
+            }
+    
+            document.getElementById('logout').addEventListener('click', function(event) {
+                // Prevent the default behavior of the link
+                event.preventDefault();
+    
+                // Show a confirmation dialog
+                var confirmation = confirm("Are you sure you want to logout?");
+                if (confirmation) {
+                    // Clear localStorage
+                    localStorage.clear();
+                    
+                    // Redirect to the logout page
+                    window.location.href = "index.html";
+                }
+            });
+        });
+    </script>    
+    
+
+</body>
+</html>
