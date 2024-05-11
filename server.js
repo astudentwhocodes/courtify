@@ -32,6 +32,11 @@ app.use((req, res, next) => {
     next();
 });
 
+// Serve index.html on GET request to /
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', './src/index.html'));
+});
+
 // Use user routes
 app.use('/api', userRoutes); // Assuming user routes start with '/api'
 
