@@ -3,7 +3,6 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const mysql = require('mysql');
 const path = require('path'); 
-const fs = require('fs'); // Import the 'fs' module
 
 // Import user routes
 const userRoutes = require('./config/user');
@@ -31,18 +30,6 @@ const pool = mysql.createPool({
 app.use((req, res, next) => {
     req.pool = pool;
     next();
-});
-
-// Handle render route
-app.get('/', (req, res) => {
-    const indexPath = path.join(__dirname, 'index.html');
-    fs.access(indexPath, fs.constants.F_OK, (err) => {
-        if (err) {
-            res.send('Welcome to Courtify'); // If index.html doesn't exist
-        } else {
-            res.sendFile(indexPath); // If index.html exists, send it
-        }
-    });
 });
 
 // Use user routes
