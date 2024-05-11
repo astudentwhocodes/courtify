@@ -28,8 +28,13 @@ app.use((req, res, next) => {
     next();
 });
 
+// Handle render route
+app.get('/', (req, res) => {
+    res.send('Welcome to Courtify');
+});
+
 // Use user routes
-app.use('/', userRoutes);
+app.use('/api', userRoutes); // Assuming user routes start with '/api'
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
