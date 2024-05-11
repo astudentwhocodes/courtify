@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Welcome to Courtify</title>
 <link rel="icon" type="image/x-icon" href="img/ballicon.ico">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" type="text/css" href="styles.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap">
 </head>
 <body>
@@ -39,7 +39,7 @@
         var password = document.getElementById("password").value;
     
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "http://localhost:3001/login", true); 
+        xhr.open("POST", "https://courtify.onrender.com/api/login", true); 
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {

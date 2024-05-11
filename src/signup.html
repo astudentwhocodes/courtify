@@ -64,7 +64,7 @@
 
         // Send AJAX request to server
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "http://localhost:3001/signup", true); // Change URL to localhost and port 3000
+        xhr.open("POST", "https://courtify.onrender.com/api/signup", true); // Change URL to localhost and port 3000
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
