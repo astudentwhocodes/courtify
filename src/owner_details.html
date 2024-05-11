@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owner Details</title>
+    <link rel="icon" type="image/x-icon" href="img/ballicon.ico">
+    <style>
+        /* CSS styles */
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #fff5e6;
+        }
+        .container {
+            display: flex;
+            height: 100%;
+        }
+        .left-div {
+            flex: 1;
+            background-color: #ffebcf;
+            margin: 20px;
+            border: 1px solid black;
+            text-align: center;
+            border-top-left-radius: 20px; /* Adjust the value as needed for the curve */
+            overflow: hidden; /* This ensures that the border-radius applies correctly */
+            margin-right: 0px;
+        }
+        .right-div {
+            flex: 4;
+            background-color: #fff5e6;
+            padding: 20px; /* Add padding around the content */
+            border: 1px solid black;
+            border-left: 0;
+            margin: 20px;
+            margin-left: 0px;
+            overflow: hidden; /* Ensure that content outside the right div is hidden */
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            background-color: #fff5e6;
+            color: black;
+            padding: 10px;
+            padding-left: 0px;
+            height: 50px; /* Set a fixed height for the header */
+            display: flex; /* Use flexbox for alignment */
+            align-items: center; /* Center items vertically */
+        }
+        .body {
+            margin-top: 20px;
+            flex: 1;
+            overflow: auto; /* Enable scrolling if table exceeds container height */
+        }
+        .owner-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .owner-table th, .owner-table td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        .owner-table th {
+            background-color: #f2f2f2;
+        }
+        .owner-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .owner-table tr:hover {
+            background-color: #ddd;
+        }
+        .owner-table th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: 	#5A5A5A;
+            color: white;
+        }
+        .navigation {
+            list-style: none;
+            padding: 0;
+            display: inline-block; 
+            border-radius: 10px;
+        }
+        .navigation li {
+            margin-bottom: 10px;
+            border-radius: 10px;
+        }
+        .delete-btn {
+            background-color: #f0680c;
+            color: white;
+            width: 70px;
+            height: 40px;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease; /* Smooth transition for background color change */
+        }
+        
+        .delete-btn:hover {
+            background-color: #d05404; /* Darker background color on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-div">
+            <!-- Content for left div -->
+            <img src="img/courtify.png" alt="Courtify Header" style="width: 100%;">
+            <ul class="navigation">
+                <li><a href="home.html" class="home"><img src="img/home.png" alt="Home Image" style="width: 100%;"></a></li>
+                <!-- Dashboard link only for admin -->
+                <li id="dashboardLink" style="display: none;"><a href="dashboard.html"><img src="img/dashboard.png" alt="Dashboard Image" style="width: 100%;"></a></li>
+                <!-- User Profile link -->
+                <li ><a href="user_profile.html"><img src="img/userprofile.png" alt="User Profile Image" style="width: 100%;"></a></li>
+                <li id="courtlistingLink" style="display: none;"><a href="court_listing.html"><img src="img/courtlisting.png" alt="Court Listing Image" style="width: 100%;"></a></li>
+                <li id="addcourtLink" style="display: none;"><a href="add_court.html"><img src="img/addcourt.png" alt="Add Court Image" style="width: 100%;"></a></li>
+                <li id="courtbookingLink" style="display: none;"><a href="court_booking.html"><img src="img/courtbooking.png" alt="Court Booking Image" style="width: 100%;"></a></li>
+                <li id="customerdetailsLink" style="display: none;"><a href="customer_details.html"><img src="img/customerdetails.png" alt="Customer Details Image" style="width: 100%;"></a></li>
+                <li id="ownerdetailsLink" style="display: none; background-color: #f0680c;"><a href="owner_details.html"><img src="img/ownerdetails.png" alt="Owner Details Image" style="width: 100%;"></a></li>
+                <li id="courtdetailsLink" style="display: none;"><a href="court_details.html"><img src="img/courtdetails.png" alt="Court Details Image" style="width: 100%;"></a></li>
+                <li><a id="logout" href="index.html"><img src="img/logout.png" alt="Logout Image" style="width: 50%;"></a></li>
+            </ul>
+        </div>
+        <div class="right-div">
+            <div class="header" id="header">
+                <h2>Owner Details</h2>
+            </div>
+            <div class="body">
+                <div class="dataDiv"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Retrieve user_id from local storage
+            var user_id = localStorage.getItem('user_id');
+
+            // Fetch user role and username from the server
+            fetchUserInfo(user_id);
+            fetchOwnerInfo();
+
+            function fetchUserInfo(user_id) {
+                fetch('https://courtify.onrender.com/userinfo/' + user_id) // Assuming your server endpoint is /userinfo/:user_id
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.role === 'admin') {
+                            document.getElementById('dashboardLink').style.display = 'block';
+                            document.getElementById('customerdetailsLink').style.display = 'block';
+                            document.getElementById('ownerdetailsLink').style.display = 'block';
+                            document.getElementById('courtdetailsLink').style.display = 'block';
+                        }
+                        else if (data.role === 'owner') {
+                            document.getElementById('courtlistingLink').style.display = 'block';
+                            document.getElementById('addcourtLink').style.display = 'block';
+                        }
+                        else if (data.role === 'customer') {
+                            document.getElementById('courtbookingLink').style.display = 'block';
+                        }
+
+                    })
+                    .catch(error => console.error('Error fetching user info:', error));
+            }
+
+            function fetchOwnerInfo(user_id) {
+                fetch('https://courtify.onrender.com/api/user/owner')
+                    .then(response => response.json())
+                    .then(data => {
+                        // Get reference to the dataDiv
+                        const dataDiv = document.querySelector('.dataDiv');
+            
+                        // Create a table element
+                        const table = document.createElement('table');
+                        table.classList.add('owner-table');
+            
+                        // Create table header
+                        const tableHeader = document.createElement('thead');
+                        const headerRow = document.createElement('tr');
+                        const headers = ['User ID', 'Username', 'Email', 'Full Name', 'About', 'Join Date', 'Actions']; // Table headers
+                        headers.forEach(headerText => {
+                            const headerCell = document.createElement('th');
+                            headerCell.textContent = headerText;
+                            headerRow.appendChild(headerCell);
+                        });
+                        tableHeader.appendChild(headerRow);
+                        table.appendChild(tableHeader);
+            
+                        // Create table body and populate with data
+                        const tableBody = document.createElement('tbody');
+                        data.forEach(owner => {
+                            const row = document.createElement('tr');
+                            // Populate table cells with data
+                            const cellValues = [
+                                owner.user_id,
+                                owner.username,
+                                owner.email,
+                                owner.fullname,
+                                owner.about,
+                                owner.join_date,
+                                '<button class="delete-btn" data-user-id="' + owner.user_id + '">Delete</button>' // Save user_id as data attribute
+                            ];
+                            cellValues.forEach(value => {
+                                const cell = document.createElement('td');
+                                cell.innerHTML = value;
+                                row.appendChild(cell);
+                            });
+                            tableBody.appendChild(row);
+                        });
+                        table.appendChild(tableBody);
+            
+                        // Append the table to the dataDiv
+                        dataDiv.appendChild(table);
+            
+                        // Add event listener to delete buttons
+                        const deleteButtons = document.querySelectorAll('.delete-btn');
+                        deleteButtons.forEach(button => {
+                            button.addEventListener('click', function() {
+                                // Preserve reference to button element
+                                const self = this;
+
+                                // Retrieve user_id from data attribute
+                                const userId = self.dataset.userId;
+
+                                // Show confirmation dialog
+                                const confirmation = confirm("Are you sure you want to delete this user?");
+
+                                if (confirmation) {
+                                    // Call delete court endpoint with user_id
+                                    fetch(`https://courtify.onrender.com/court/deletecourt/${userId}`, {
+                                        method: 'DELETE'
+                                    })
+                                    .then(response => {
+                                        if (response.ok) {
+                                            console.log('Courts deleted successfully.');
+
+                                            // Call delete endpoint with user_id
+                                            fetch(`https://courtify.onrender.com/api/delete/${userId}`, {
+                                                method: 'DELETE'
+                                            })
+                                            .then(response => {
+                                                if (response.ok) {
+                                                    // Remove the row from the table if deletion is successful
+                                                    const row = self.closest('tr');
+                                                    row.parentNode.removeChild(row);
+                                                    console.log('User deleted successfully.');
+                                                } else {
+                                                    console.error('Failed to delete user.');
+                                                }
+                                            })
+                                            .catch(error => console.error('Error deleting user:', error));
+                                        } else {
+                                            console.error('Failed to delete courts.');
+                                        }
+                                    })
+                                    .catch(error => console.error('Error deleting courts:', error));
+                                }
+                                
+                            });
+                        });
+
+
+
+                    })
+                    .catch(error => console.error('Error fetching user info:', error));
+            }
+            
+            
+
+            document.getElementById('logout').addEventListener('click', function(event) {
+                // Prevent the default behavior of the link
+                event.preventDefault();
+
+                // Show a confirmation dialog
+                var confirmation = confirm("Are you sure you want to logout?");
+                if (confirmation) {
+                    // Clear localStorage
+                    localStorage.clear();
+                    
+                    // Redirect to the logout page
+                    window.location.href = "index.html";
+                }
+            });
+        });
+    </script>
+</body>
+</html>

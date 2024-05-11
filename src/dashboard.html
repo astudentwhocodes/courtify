@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="icon" type="image/x-icon" href="/img/ballicon.ico">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #fff5e6;
+        }
+        .container {
+            display: flex;
+            height: 100%;
+        }
+        .left-div {
+            flex: 1;
+            background-color: #ffebcf;
+            margin: 20px;
+            border: 1px solid black;
+            text-align: center;
+            border-top-left-radius: 20px; /* Adjust the value as needed for the curve */
+            overflow: hidden; /* This ensures that the border-radius applies correctly */
+            margin-right: 0px;
+        }
+        .right-div {
+            flex: 4;
+            background-color: #fff5e6;
+            padding: 20px;
+            border: 1px solid black;
+            border-left: 0;
+            margin: 20px;
+            margin-left: 0px;
+        }
+        .header {
+            background-color: #fff5e6;
+            color: black;
+            padding: 10px;
+            padding-left: 0px;
+        }
+        .body {
+            margin-top: 20px;
+        }
+        .navigation {
+            list-style: none;
+            padding: 0;
+            display: inline-block; 
+            border-radius: 10px;
+        }
+        .navigation li {
+            margin-bottom: 10px;
+            border-radius: 10px;
+        }
+        .horizontal-divs {
+            display: flex;
+            justify-content: space-between; /* Adjust as needed */
+            margin-bottom: 20px; /* Add some space between the rows */
+        }
+        
+        .horizontal-div {
+            flex: 1;
+            background-color: #ffd699; /* Adjust color as needed */
+            padding: 20px;
+            margin-right: 10px; /* Adjust spacing between divs */
+            border: 1px solid black;
+            border-radius: 10px;
+            position: relative; /* Required for positioning the image */
+        }
+        .horizontal-div img {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+        }
+        .horizontal-div:last-child {
+            margin-right: 0; /* Remove margin from last div */
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-div">
+            <!-- Content for left div -->
+            <img src="img/courtify.png" alt="Courtify Header" style="width: 100%;">
+            <ul class="navigation">
+                <li><a href="home.html" class="home"><img src="img/home.png" alt="Home Image" style="width: 100%;"></a></li>
+                <!-- Dashboard link only for admin -->
+                <li id="dashboardLink" style="display: none; background-color: #f0680c;"><a href="dashboard.html"><img src="img/dashboard.png" alt="Dashboard Image" style="width: 100%;"></a></li>
+                <!-- User Profile link -->
+                <li><a href="user_profile.html"><img src="img/userprofile.png" alt="User Profile Image" style="width: 100%;"></a></li>
+                <li id="courtlistingLink" style="display: none;"><a href="court_listing.html"><img src="img/courtlisting.png" alt="Court Listing Image" style="width: 100%;"></a></li>
+                <li id="addcourtLink" style="display: none;"><a href="add_court.html"><img src="img/addcourt.png" alt="Add Court Image" style="width: 100%;"></a></li>
+                <li id="courtbookingLink" style="display: none;"><a href="court_booking.html"><img src="img/courtbooking.png" alt="Court Booking Image" style="width: 100%;"></a></li>
+                <li id="customerdetailsLink" style="display: none;"><a href="customer_details.html"><img src="img/customerdetails.png" alt="Customer Details Image" style="width: 100%;"></a></li>
+                <li id="ownerdetailsLink" style="display: none;"><a href="owner_details.html"><img src="img/ownerdetails.png" alt="Owner Details Image" style="width: 100%;"></a></li>
+                <li id="courtdetailsLink" style="display: none;"><a href="court_details.html"><img src="img/courtdetails.png" alt="Court Details Image" style="width: 100%;"></a></li>
+                <li><a id="logout" href="index.html"><img src="img/logout.png" alt="Logout Image" style="width: 50%;"></a></li>
+            </ul>
+        </div>
+        <div class="right-div">
+            <!-- Content for right div -->
+            <div class="header" id="header">
+                <h2>Dashboard</h2> <!-- Initially set to "Guest" -->
+            </div>
+            <div class="body">
+                <div class="horizontal-divs">
+                    <div class="horizontal-div" id="totalCustomersDiv">
+                        Total Customers: <br><br><span id="totalCustomersNumber" style="font-size: 30px;">0</span>
+                        <img src="img/customersicon.png" alt="Icon 1">
+                    </div>
+                    <div class="horizontal-div" id="totalOwnersDiv">
+                        Total Owners: <br><br><span id="totalOwnersNumber" style="font-size: 30px;">0</span>
+                        <img src="img/ownersicon.png" alt="Icon 2">
+                    </div>
+                </div>
+                <div class="horizontal-divs">
+                    <div class="horizontal-div" id="totalCourtsDiv">
+                        Total Courts: <br><br><span id="totalCourtsNumber" style="font-size: 30px;">0</span>
+                        <img src="img/courtsicon.png" alt="Icon 3">
+                    </div>
+                    <div class="horizontal-div" id="totalBookingsDiv">
+                        Total Bookings: <br><br><span id="totalBookingsNumber" style="font-size: 30px;">0</span>
+                        <img src="img/bookingsicon.png" alt="Icon 4">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Retrieve user_id from local storage
+        var user_id = localStorage.getItem('user_id');
+
+        // Fetch user role and username from the server
+        fetchUserInfo(user_id);
+
+        function fetchUserInfo(user_id) {
+            fetch('https://courtify.onrender.com/userinfo/' + user_id) // Assuming your server endpoint is /userinfo/:user_id
+                .then(response => response.json())
+                .then(data => {
+                    if (data.role === 'admin') {
+                        document.getElementById('dashboardLink').style.display = 'block';
+                        document.getElementById('customerdetailsLink').style.display = 'block';
+                        document.getElementById('ownerdetailsLink').style.display = 'block';
+                        document.getElementById('courtdetailsLink').style.display = 'block';
+                    }
+                    else if (data.role === 'owner') {
+                        document.getElementById('courtlistingLink').style.display = 'block';
+                        document.getElementById('addcourtLink').style.display = 'block';
+                    }
+                    else if (data.role === 'customer') {
+                        document.getElementById('courtbookingLink').style.display = 'block';
+                    }
+                })
+                .catch(error => console.error('Error fetching user info:', error));
+        }
+
+        function fetchTotalUsers() {
+            fetch('https://courtify.onrender.com/dashboardinfo/countUsersCourtsAndBookings') // Assuming your server endpoint is /countUsersCourtsAndBookings
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('totalCustomersNumber').textContent = data.totalCustomers;
+                    document.getElementById('totalOwnersNumber').textContent = data.totalOwners;
+                    document.getElementById('totalCourtsNumber').textContent = data.totalCourts;
+                    document.getElementById('totalBookingsNumber').textContent = data.totalBookings;
+                })
+                .catch(error => console.error('Error fetching total users, courts, and bookings:', error));
+        }
+        
+        document.getElementById('logout').addEventListener('click', function(event) {
+            // Prevent the default behavior of the link
+            event.preventDefault();
+
+            // Show a confirmation dialog
+            var confirmation = confirm("Are you sure you want to logout?");
+            if (confirmation) {
+                // Clear localStorage
+                localStorage.clear();
+                
+                // Redirect to the logout page
+                window.location.href = "index.html";
+            }
+        });
+
+        // Call the function initially
+        fetchTotalUsers();
+
+        // Function to periodically update the total number of customers, owners, courts, and bookings (every 5 minutes)
+        setInterval(fetchTotalUsers, 300000); // 300000 milliseconds = 5 minutes
+    });
+</script>
+</body>
+</html>

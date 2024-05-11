@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>User Profile</title>
+        <link rel="icon" type="image/x-icon" href="img/ballicon.ico">
+        <style>
+            /* CSS styles */
+            body, html {
+                height: 100%;
+                margin: 0;
+                font-family: Arial, sans-serif;
+                background-color: #fff5e6;
+            }
+            .container {
+                display: flex;
+                height: 100%;
+            }
+            .left-div {
+                flex: 1;
+                background-color: #ffebcf;
+                margin: 20px;
+                border: 1px solid black;
+                text-align: center;
+                border-top-left-radius: 20px; /* Adjust the value as needed for the curve */
+                overflow: hidden; /* This ensures that the border-radius applies correctly */
+                margin-right: 0px;
+            }
+            .right-div {
+                flex: 4;
+                background-color: #fff5e6;
+                padding: 20px;
+                display: flex;
+                justify-content: space-between;
+                margin: 20px;
+                margin-left: 0px;
+                border: 1px solid black;
+                border-left: 0;
+            }
+            .header {
+                background-color: #fff5e6;
+                color: black;
+                padding: 10px;
+                padding-left: 0px;
+                font-size: 35px;
+            }
+            .body {
+                margin-top: 20px;
+            }
+            .navigation {
+                list-style: none;
+                padding: 0;
+                display: inline-block; 
+                border-radius: 10px;
+            }
+            .navigation li {
+                margin-bottom: 10px;
+                border-radius: 10px;
+            }
+            /* Styles for the new divs */
+            .info-container {
+                flex: 1;
+                padding: 20px;
+                margin-right: 20px;
+                display: flex;
+                flex-direction: column;
+            }
+            .info-container-r {
+                flex: 1;
+                padding: 20px;
+                margin-right: 20px;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end; /* Align the profile picture container to the right */
+            }
+            
+            .profile-picture-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center; /* Align items vertically */
+                justify-content: center; /* Center items horizontally */
+                position: relative; /* Make the container relative */
+            }
+            .profile-picture {
+                width: 200px; /* Adjust width here */
+                height: 200px; /* Adjust height here */
+                border-radius: 100%; /* Make it circular */
+            }
+            
+            
+            .profile-line {
+                width: 100%; /* Adjust the width as needed */
+                height: 2px;
+                background-color: black;
+                margin-top: 50px;
+                margin-bottom: 0px;
+            }
+            .joined-date {
+                font-size: 12px;
+                margin-top: 5px;
+            }
+            .infotext {
+                font-size: 25px;
+            }
+            .info{
+                color: gray;
+            }
+        </style>
+    </head>
+<body>
+    <div class="container">
+        <div class="left-div">
+            <!-- Content for left div -->
+            <img src="img/courtify.png" alt="Courtify Header" style="width: 100%;">
+            <ul class="navigation">
+                <li><a href="home.html" class="home"><img src="img/home.png" alt="Home Image" style="width: 100%;"></a></li>
+                <!-- Dashboard link only for admin -->
+                <li id="dashboardLink" style="display: none;"><a href="dashboard.html"><img src="img/dashboard.png" alt="Dashboard Image" style="width: 100%;"></a></li>
+                <!-- User Profile link -->
+                <li style="background-color: #f0680c"><a href="user_profile.html"><img src="img/userprofile.png" alt="User Profile Image" style="width: 100%;"></a></li>
+                <li id="courtlistingLink" style="display: none;"><a href="court_listing.html"><img src="img/courtlisting.png" alt="Court Listing Image" style="width: 100%;"></a></li>
+                <li id="addcourtLink" style="display: none;"><a href="add_court.html"><img src="img/addcourt.png" alt="Add Court Image" style="width: 100%;"></a></li>
+                <li id="courtbookingLink" style="display: none;"><a href="court_booking.html"><img src="img/courtbooking.png" alt="Court Booking Image" style="width: 100%;"></a></li>
+                <li id="customerdetailsLink" style="display: none;"><a href="customer_details.html"><img src="img/customerdetails.png" alt="Customer Details Image" style="width: 100%;"></a></li>
+                <li id="ownerdetailsLink" style="display: none;"><a href="owner_details.html"><img src="img/ownerdetails.png" alt="Owner Details Image" style="width: 100%;"></a></li>
+                <li id="courtdetailsLink" style="display: none;"><a href="court_details.html"><img src="img/courtdetails.png" alt="Court Details Image" style="width: 100%;"></a></li>
+                <li><a id="logout" href="index.html"><img src="img/logout.png" alt="Logout Image" style="width: 50%;"></a></li>
+            </ul>
+        </div>
+        <div class="right-div">
+            <!-- Content for right div -->
+            <div class="info-container">
+                <h2>User Information:</h2>
+                <p>
+                    <strong class="infotext">Username:</strong> <br><span id="username" class="info"></span><br><br>
+                    <strong class="infotext">Role:</strong> <br><span id="role" class="info"></span><br><br>
+                    <strong class="infotext">Fullname:</strong> <br><span id="fullname" class="info"></span><br><br>
+                    <strong class="infotext">Address:</strong> <br><span id="address" class="info"></span><br><br>
+                    <strong class="infotext">About:</strong> <br><span id="about" class="info"></span><br><br>
+                </p>
+            </div>
+            <div class="info-container-r">
+                <div class="profile-picture-container">
+                    <img id="profile" src="" alt="Profile Picture" class="profile-picture">
+                    <div class="profile-line"></div> <!-- Line below the image -->
+                    <p class="joined-date" id="joinDate"></p> <!-- "Joined" date below the line -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Retrieve user_id from local storage
+        var user_id = localStorage.getItem('user_id');
+
+        // Fetch user role and username from the server
+        fetchUserInfo(user_id);
+
+        function fetchUserInfo(user_id) {
+            fetch('https://courtify.onrender.com/userinfo/' + user_id) // Assuming your server endpoint is /userinfo/:user_id
+                .then(response => response.json())
+                .then(data => {
+                    if (data.role === 'admin') {
+                        document.getElementById('dashboardLink').style.display = 'block';
+                        document.getElementById('customerdetailsLink').style.display = 'block';
+                        document.getElementById('ownerdetailsLink').style.display = 'block';
+                        document.getElementById('courtdetailsLink').style.display = 'block';
+                        document.getElementById('role').innerText = "Administrator";
+                    }
+                    else if (data.role === 'owner') {
+                        document.getElementById('courtlistingLink').style.display = 'block';
+                        document.getElementById('addcourtLink').style.display = 'block';
+                        document.getElementById('role').innerText = "Court Owner";
+                    }
+                    else if (data.role === 'customer') {
+                        document.getElementById('courtbookingLink').style.display = 'block';
+                        document.getElementById('role').innerText = "Customer";
+                    }
+
+                    document.getElementById('username').innerText = data.username;
+                    document.getElementById('fullname').innerText = data.fullname;
+                    document.getElementById('address').innerText = data.address;
+                    document.getElementById('about').innerText = data.about;
+                    document.getElementById('profile').src = "/img/" + data.photo;
+                    document.getElementById('joinDate').innerText = "Joined " + data.join_date; // Add "Joined" text
+                })
+                .catch(error => console.error('Error fetching user info:', error));
+        }
+        document.getElementById('logout').addEventListener('click', function(event) {
+            // Prevent the default behavior of the link
+            event.preventDefault();
+
+            // Show a confirmation dialog
+            var confirmation = confirm("Are you sure you want to logout?");
+            if (confirmation) {
+                // Clear localStorage
+                localStorage.clear();
+                
+                // Redirect to the logout page
+                window.location.href = "index.html";
+            }
+        });
+    });
+</script>
+</body>
+</html>
