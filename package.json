@@ -21,6 +21,6 @@
     "nodemon": "^2.0.15"
   },
   "bin" : {
-    "execute" : "index.js"
+    "execute" : "server.js"
   }
 } 
