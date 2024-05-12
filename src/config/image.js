@@ -7,7 +7,7 @@ const path = require('path');
 // Initialize Firebase Storage
 const storage = new Storage({
     projectId: 'courtify-ed05a',
-    keyFilename: 'service_account_key.json', // Path to your service account key file
+    keyFilename: './service_account_key.json', // Path to your service account key file
 });
 
 // Initialize Multer for file uploads
