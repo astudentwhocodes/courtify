@@ -162,13 +162,42 @@
             await fetchUserInfo(user_id);
     
             async function declineBooking(court_id, user_id) {
-                console.log("decline")
-                console.log("courtid: "+court_id+", userid: "+user_id)
+                var confirmation = confirm("Are you sure you want to accept the booking?");
+                if (confirmation) {
+                    // Make an HTTP POST request to the specified endpoint
+                    fetch(`https://courtify.onrender.com/book/decline/${court_id}/${user_id}`, {
+                        method: 'POST'
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            console.log(`Booking for court with ID ${court_id} declined successfully`);
+                            location.reload();
+                        } else {
+                            console.error('Failed to decline booking');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                }
             }
     
             async function acceptBooking(court_id, user_id) {
-                console.log("accept")
-                console.log("courtid: "+court_id+", userid: "+user_id)
+                // Show a confirmation dialog
+                var confirmation = confirm("Are you sure you want to accept the booking?");
+                if (confirmation) {
+                    // Make an HTTP POST request to the specified endpoint
+                    fetch(`https://courtify.onrender.com/book/accept/${court_id}/${user_id}`, {
+                        method: 'POST'
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            console.log(`Booking for court with ID ${court_id} accepted successfully`);
+                            location.reload();
+                        } else {
+                            console.error('Failed to accept booking');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                }
             }
             
         
@@ -198,6 +227,25 @@
                     return; // Exit the function if the container is not found
                 }
                 bookingListDiv.innerHTML = ''; // Clear existing content
+
+                document.querySelector('.booking-list').addEventListener('click', function(event) {
+                    if (event.target.classList.contains('decline-btn')) {
+                        // Prevent the default behavior of the button
+                        event.preventDefault();
+                        
+                        var court_id = event.target.dataset.courtId;
+                        var user_id = event.target.dataset.userId;
+                        declineBooking(court_id, user_id);
+                    }
+                    if (event.target.classList.contains('accept-btn')) {
+                        // Prevent the default behavior of the button
+                        event.preventDefault();
+                        
+                        var court_id = event.target.dataset.courtId;
+                        var user_id = event.target.dataset.userId;
+                        acceptBooking(court_id, user_id);
+                    }
+                });  
             
                 // Loop through each booking and display it
                 for (const booking of bookingData) {
@@ -220,34 +268,18 @@
                         
                         // Update HTML with customer information
                         bookingItem.innerHTML = `
-                            <img id="customer-img" src="/img/${customerInfo.photo}" alt="Customer Photo"></img>
+                            <img id="customer-img" src="/img/${customerInfo.photo}" alt="Customer Photo" data-user-id="${customerInfo.user_id}"></img>
                             <p style="font-weight: bold;">Name:</p> ${customerInfo.username}
                             <p style="font-weight: bold;">Booking ID:</p> ${booking.booking_id}
                             <p style="font-weight: bold;">Booking Date:</p> ${booking.booking_date}
                             <p style="font-weight: bold;">Status:</p> ${statusText}
                             <p style="font-weight: bold;">Price:</p> ₱${booking.booking_price}
                             <button class="info-btn" data-court-id="${court_id}">Info</button>
-                            <button class="accept-btn" data-court-id="${court_id}" ${booking.status === 1 ? 'style="display: none;"' : ''}>Accept</button>
-                            <button class="decline-btn" data-court-id="${court_id}" ${booking.status === 1 ? 'style="display: none;"' : ''}>Decline</button>
+                            <button class="accept-btn" data-court-id="${court_id}" data-user-id="${customerInfo.user_id}" ${booking.status === 1 ? 'style="display: none;"' : ''}>Accept</button>
+                            <button class="decline-btn" data-court-id="${court_id}" data-user-id="${customerInfo.user_id}" ${booking.status === 1 ? 'style="display: none;"' : ''}>Decline</button>
                         `;
+
                         bookingListDiv.appendChild(bookingItem);
-            
-                        document.querySelector('.booking-list').addEventListener('click', function(event) {
-                            if (event.target.classList.contains('decline-btn')) {
-                                // Prevent the default behavior of the button
-                                event.preventDefault();
-                                
-                                var court_id = event.target.dataset.courtId;
-                                declineBooking(court_id, customerInfo.user_id);
-                            }
-                            if (event.target.classList.contains('accept-btn')) {
-                                // Prevent the default behavior of the button
-                                event.preventDefault();
-                                
-                                var court_id = event.target.dataset.courtId;
-                                acceptBooking(court_id, customerInfo.user_id);
-                            }
-                        });
                         
                     } catch (error) {
                         console.error('Error fetching customer info for booking:', error);
