@@ -98,7 +98,7 @@
             fetchUserInfo(user_id);
     
             function fetchUserInfo(user_id) {
-                fetch('https://courtify.onrender.com/userinfo/' + user_id) // Assuming your server endpoint is /userinfo/:user_id
+                fetch('http://localhost:3001/userinfo/' + user_id) // Assuming your server endpoint is /userinfo/:user_id
                     .then(response => response.json())
                     .then(data => {
                         if (data.role === 'admin') {
@@ -181,7 +181,7 @@
                     
                     // Send AJAX request to add court details
                     var xhr = new XMLHttpRequest();
-                    xhr.open("POST", "https://courtify.onrender.com/court/addcourt", true);
+                    xhr.open("POST", "http://localhost:3001/court/addcourt", true);
                     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                     xhr.onreadystatechange = function() {
                         if (xhr.readyState === 4) {
@@ -210,7 +210,7 @@
                                 
                                 // Send AJAX request to add availability
                                 var xhr2 = new XMLHttpRequest();
-                                xhr2.open("POST", "https://courtify.onrender.com/court/addavailability", true);
+                                xhr2.open("POST", "http://localhost:3001/court/addavailability", true);
                                 xhr2.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                                 xhr2.onreadystatechange = function() {
                                     if (xhr2.readyState === 4) {
@@ -275,7 +275,7 @@
                 formData.append('courtImage', file, filename); // Append the filename to the FormData
     
                 // Send a POST request to save the image
-                return fetch('https://courtify.onrender.com/image/saveImage', {
+                return fetch('http://localhost:3001/image/saveImage', {
                     method: 'POST',
                     body: formData
                 })
@@ -290,8 +290,8 @@
                 })
                 .then(data => {
                     // Return the generated filename
-                    return data.imagePath; // Return the imagePath from the response
-                });
+                    return data.filename; // Return the imageUrl from the response
+                });                
             } else {
                 // No file selected
                 alert("Please upload an image first.");
