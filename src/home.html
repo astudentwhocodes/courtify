@@ -73,7 +73,7 @@
                             const courtDiv = document.createElement('div');
                             courtDiv.classList.add('court-card');
                             courtDiv.innerHTML = `
-                                <img src="img/courts/${court.photo || court.id + '.png'}" alt="${court.court_name}" data-court-id="${court.court_id}">
+                                <img src="https://storage.googleapis.com/courtify-ed05a.appspot.com/courts/${court.photo || court.id + '.png'}" alt="${court.court_name}" data-court-id="${court.court_id}">
                                 <div class="court-details">
                                     <p class="address">${court.address}</p>
                                     <p class="price">₱${court.price}</p>

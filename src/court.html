@@ -159,7 +159,7 @@
                     .then(data => {
                         console.log(data); // Log court info data
                         // Update DOM with court info
-                        document.getElementById('courtPhoto').src = "/img/courts/" + data.photo;
+                        document.getElementById('courtPhoto').src = "https://storage.googleapis.com/courtify-ed05a.appspot.com/courts/" + data.photo;
                         document.getElementById('courtName').innerText = data.court_name;
                         document.getElementById('courtAddress').innerText = data.address;
                         document.getElementById('courtAbout').innerText = data.about;

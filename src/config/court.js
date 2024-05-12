@@ -1,6 +1,17 @@
 const express = require('express');
 const mysql = require('mysql2/promise'); // Use mysql2/promise for async/await support
+const { Storage } = require('@google-cloud/storage');
+var admin = require("firebase-admin");
+
+const serviceAccount = require('service_account_key.json');
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+});
+
 const router = express.Router();
+
+const storage = new Storage();
+const bucketName = 'courtify-ed05a.appspot.com'; // Replace with your bucket name
 
 const pool = mysql.createPool({
     connectionLimit: 10,
@@ -9,15 +20,15 @@ const pool = mysql.createPool({
     password: 'lafXyFPRFm',
     database: 'sql6705169',
     port: 3306 // Port number
-  });
+});
 
 router.post('/addcourt', async (req, res) => {
     const courtName = req.body.court_name;
     const address = req.body.address;
     const price = req.body.price;
     const userId = req.body.user_id;
-    const about = req.body.about;
-    const photo = req.body.photo;
+    const about = req.body.about; // Extract about from request body
+    const photo = req.body.photo; // Extract photo from request body
 
     if (!courtName || !address || !price || !userId || !photo) {
         return res.status(400).json({ error: 'Court name, address, price, user ID, and photo are required.' });
@@ -36,10 +47,6 @@ router.post('/addcourt', async (req, res) => {
     }
 });
 
-
-
-
-// Endpoint to add availability for a court
 router.post('/addavailability', async (req, res) => {
     const courtId = req.body.court_id;
     const timeSlots = req.body.time_slots || [];
@@ -84,8 +91,10 @@ router.delete('/deletecourt/:user_id', async (req, res) => {
         return res.status(400).json({ error: 'User ID is required.' });
     }
 
+    let connection;
+
     try {
-        const connection = await pool.getConnection();
+        connection = await pool.getConnection();
 
         // Check if the user exists
         const [userRows] = await connection.execute('SELECT * FROM user_tb WHERE user_id = ?', [userId]);
@@ -96,6 +105,18 @@ router.delete('/deletecourt/:user_id', async (req, res) => {
 
         // Begin transaction
         await connection.beginTransaction();
+
+        // Get courts associated with the user
+        const [courtRows] = await connection.execute('SELECT * FROM court_tb WHERE user_id = ?', [userId]);
+
+        // Delete courts associated with the user
+        for (const court of courtRows) {
+            // Delete associated image from Firebase Storage if exists
+            if (court.photo) {
+                await storage.bucket(bucketName).file('courts/' + court.photo).delete();
+                console.log('Image deleted from Firebase Storage:', court.photo);
+            }
+        }
 
         // Delete courts associated with the user
         await connection.execute('DELETE FROM court_tb WHERE user_id = ?', [userId]);
@@ -110,8 +131,11 @@ router.delete('/deletecourt/:user_id', async (req, res) => {
         return res.status(200).json({ message: 'Courts deleted successfully.' });
     } catch (error) {
         console.error('Error deleting courts:', error);
-        // Rollback transaction on error
-        await connection.rollback();
+        if (connection) {
+            // Rollback transaction on error
+            await connection.rollback();
+            connection.release();
+        }
         return res.status(500).json({ error: 'Internal server error.' });
     }
 });
@@ -123,8 +147,10 @@ router.delete('/deletecourtid/:court_id', async (req, res) => {
         return res.status(400).json({ error: 'Court ID is required.' });
     }
 
+    let connection;
+
     try {
-        const connection = await pool.getConnection();
+        connection = await pool.getConnection();
 
         // Check if the court exists
         const [courtRows] = await connection.execute('SELECT * FROM court_tb WHERE court_id = ?', [courtId]);
@@ -135,6 +161,15 @@ router.delete('/deletecourtid/:court_id', async (req, res) => {
 
         // Begin transaction
         await connection.beginTransaction();
+
+        // Get court details
+        const [court] = courtRows;
+
+        // Delete associated image from Firebase Storage if exists
+        if (court.photo) {
+            await storage.bucket(bucketName).file('courts/' + court.photo).delete();
+            console.log('Image deleted from Firebase Storage:', court.photo);
+        }
 
         // Delete the court
         await connection.execute('DELETE FROM court_tb WHERE court_id = ?', [courtId]);
@@ -149,11 +184,13 @@ router.delete('/deletecourtid/:court_id', async (req, res) => {
         return res.status(200).json({ message: 'Court deleted successfully.' });
     } catch (error) {
         console.error('Error deleting court:', error);
-        // Rollback transaction on error
-        await connection.rollback();
+        if (connection) {
+            // Rollback transaction on error
+            await connection.rollback();
+            connection.release();
+        }
         return res.status(500).json({ error: 'Internal server error.' });
     }
 });
-
 
 module.exports = router;
