@@ -4,7 +4,7 @@ const mysql = require('mysql2/promise');
 const router = express.Router();
 
 const pool = mysql.createPool({
-  connectionLimit: 10,
+  connectionLimit: 20,
   host: 'sql12.freemysqlhosting.net',
   user: 'sql12707087',
   password: 'tDTTLUjj5Y',

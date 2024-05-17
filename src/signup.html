@@ -48,6 +48,11 @@
         // Get input values
         var username = document.getElementById("username").value;
         var email = document.getElementById("email").value;
+		if (!email.includes("@") || !email.endsWith(".com")) {
+            alert("Please enter a valid email address.");
+            return;
+        }
+		
         var password = document.getElementById("password").value;
         var role = document.querySelector('input[name="role"]:checked').value;
 
@@ -60,7 +65,11 @@
         const day = String(today.getDate()).padStart(2, '0');
         const year = today.getFullYear();
         const joinDate = `${monthName} ${day} ${year}`;
-
+		
+		var confirmation = confirm("Are you sure you want to sign up?");
+        if (!confirmation) {
+            return; // Do nothing if user cancels
+        }
 
         // Send AJAX request to server
         var xhr = new XMLHttpRequest();

@@ -14,7 +14,7 @@ const storage = new Storage();
 const bucketName = 'courtify-ed05a.appspot.com'; // Replace with your bucket name
 
 const pool = mysql.createPool({
-    connectionLimit: 10,
+    connectionLimit: 20,
     host: 'sql12.freemysqlhosting.net',
     user: 'sql12707087',
     password: 'tDTTLUjj5Y',

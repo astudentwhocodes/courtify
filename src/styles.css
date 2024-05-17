@@ -86,7 +86,7 @@ h1 {
     background-color: #f0f0f0; /* Light gray background on hover */
 }
 a {
-    color: inherit; /* Inherit color from parent element */
+    color: #f0680c;
     text-decoration: none; /* Remove underline */
     transition: color 0.3s ease; /* Smooth transition for color change */
 }

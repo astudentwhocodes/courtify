@@ -23,7 +23,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'src')));
 
 const pool = mysql.createPool({
-    connectionLimit: 10,
+    connectionLimit: 20,
     host: 'sql12.freemysqlhosting.net',
     user: 'sql12707087',
     password: 'tDTTLUjj5Y',
