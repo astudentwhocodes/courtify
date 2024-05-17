@@ -24,11 +24,11 @@ app.use(express.static(path.join(__dirname, 'src')));
 
 const pool = mysql.createPool({
     connectionLimit: 10,
-    host: 'sql6.freemysqlhosting.net',
-    user: 'sql6705169',
-    password: 'lafXyFPRFm',
-    database: 'sql6705169',
-    port: 3306 
+    host: 'sql12.freemysqlhosting.net',
+    user: 'sql12707087',
+    password: 'tDTTLUjj5Y',
+    database: 'sql12707087',
+    port: 3306 // Port number
 });
 
 app.use((req, res, next) => {
