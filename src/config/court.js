@@ -3,7 +3,7 @@ const mysql = require('mysql2/promise'); // Use mysql2/promise for async/await s
 const { Storage } = require('@google-cloud/storage');
 var admin = require("firebase-admin");
 
-const serviceAccount = require('service_account_key.json');
+const serviceAccount = require('./service_account_key.json');
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
 });
