@@ -1,113 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>User Profile</title>
-        <link rel="icon" type="image/x-icon" href="https://storage.googleapis.com/courtify-ed05a.appspot.com/ballicon.ico">
-        <style>
-            /* CSS styles */
-            body, html {
-                height: 100%;
-                margin: 0;
-                font-family: Arial, sans-serif;
-                background-color: #fff5e6;
-            }
-            .container {
-                display: flex;
-                height: 100%;
-            }
-            .left-div {
-                flex: 1;
-                background-color: #ffebcf;
-                margin: 20px;
-                border: 1px solid black;
-                text-align: center;
-                border-top-left-radius: 20px; /* Adjust the value as needed for the curve */
-                overflow: hidden; /* This ensures that the border-radius applies correctly */
-                margin-right: 0px;
-            }
-            .right-div {
-                flex: 4;
-                background-color: #fff5e6;
-                padding: 20px;
-                display: flex;
-                justify-content: space-between;
-                margin: 20px;
-                margin-left: 0px;
-                border: 1px solid black;
-                border-left: 0;
-            }
-            .header {
-                background-color: #fff5e6;
-                color: black;
-                padding: 10px;
-                padding-left: 0px;
-                font-size: 35px;
-            }
-            .body {
-                margin-top: 20px;
-            }
-            .navigation {
-                list-style: none;
-                padding: 0;
-                display: inline-block; 
-                border-radius: 10px;
-            }
-            .navigation li {
-                margin-bottom: 10px;
-                border-radius: 10px;
-            }
-            /* Styles for the new divs */
-            .info-container {
-                flex: 1;
-                padding: 20px;
-                margin-right: 20px;
-                display: flex;
-                flex-direction: column;
-            }
-            .info-container-r {
-                flex: 1;
-                padding: 20px;
-                margin-right: 20px;
-                display: flex;
-                flex-direction: column;
-                align-items: flex-end; /* Align the profile picture container to the right */
-            }
-            
-            .profile-picture-container {
-                display: flex;
-                flex-direction: column;
-                align-items: center; /* Align items vertically */
-                justify-content: center; /* Center items horizontally */
-                position: relative; /* Make the container relative */
-            }
-            .profile-picture {
-                width: 200px; /* Adjust width here */
-                height: 200px; /* Adjust height here */
-                border-radius: 100%; /* Make it circular */
-            }
-            
-            
-            .profile-line {
-                width: 100%; /* Adjust the width as needed */
-                height: 2px;
-                background-color: black;
-                margin-top: 50px;
-                margin-bottom: 0px;
-            }
-            .joined-date {
-                font-size: 12px;
-                margin-top: 5px;
-            }
-            .infotext {
-                font-size: 25px;
-            }
-            .info{
-                color: gray;
-            }
-        </style>
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="icon" type="image/x-icon" href="https://storage.googleapis.com/courtify-ed05a.appspot.com/ballicon.ico">
+    <style>
+        /* CSS styles */
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #fff5e6;
+        }
+        .container {
+            display: flex;
+            height: 100%;
+        }
+        .left-div {
+            flex: 1;
+            background-color: #ffebcf;
+            margin: 20px;
+            border: 1px solid black;
+            text-align: center;
+            border-top-left-radius: 20px; /* Adjust the value as needed for the curve */
+            overflow: hidden; /* This ensures that the border-radius applies correctly */
+            margin-right: 0px;
+        }
+        .right-div {
+            flex: 4;
+            background-color: #fff5e6;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            margin: 20px;
+            margin-left: 0px;
+            border: 1px solid black;
+            border-left: 0;
+        }
+        .header {
+            background-color: #fff5e6;
+            color: black;
+            padding: 10px;
+            padding-left: 0px;
+            font-size: 35px;
+        }
+        .body {
+            margin-top: 20px;
+        }
+        .navigation {
+            list-style: none;
+            padding: 0;
+            display: inline-block; 
+            border-radius: 10px;
+        }
+        .navigation li {
+            margin-bottom: 10px;
+            border-radius: 10px;
+        }
+        
+        .profile-picture-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Align items vertically */
+            justify-content: center; /* Center items horizontally */
+            position: relative; /* Make the container relative */
+        }
+        .profile-picture {
+            width: 200px; /* Adjust width here */
+            height: 200px; /* Adjust height here */
+            border-radius: 100%; /* Make it circular */
+        }
+        
+        
+        .profile-line {
+            width: 100%; /* Adjust the width as needed */
+            height: 2px;
+            background-color: black;
+            margin-top: 50px;
+            margin-bottom: 0px;
+        }
+        .joined-date {
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        .infotext {
+            font-size: 25px;
+        }
+        .info{
+            color: gray;
+        }
+    
+        /* Adjustments for form elements */
+        input[type="text"] {
+            width: 100%; /* Make all text input fields full width */
+            padding: 8px; /* Add padding for better appearance */
+            margin-bottom: 10px; /* Add some space between input fields */
+            border-radius: 5px; /* Add border-radius for rounded corners */
+            border: 1px solid #ccc; /* Add border for better visibility */
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+        }
+    
+        /* Adjust the width of the address input field */
+        #editAddressInput {
+            width: 100%;
+        }
+    
+        /* Style for the Edit/Save button */
+        #editSaveButton {
+            padding: 10px 20px; /* Add padding for better appearance */
+            border-radius: 5px; /* Add border-radius for rounded corners */
+            border: none; /* Remove default border */
+            background-color: #f0680c; /* Set background color */
+            color: white; /* Set text color */
+            cursor: pointer; /* Change cursor on hover */
+            transition: background-color 0.3s; /* Smooth transition for background color change */
+        }
+    
+        /* Change background color on hover */
+        #editSaveButton:hover {
+            background-color: #d9560b;
+        }
+        .info-container {
+            flex: 1;
+            padding: 20px;
+            margin-right: 20px;
+            display: flex;
+            flex-direction: column;
+            max-width: 500px; /* Adjust the maximum width as needed */
+        }
+        
+        .info-container-r {
+            flex: 1;
+            padding: 20px;
+            margin-right: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            max-width: 500px; /* Adjust the maximum width as needed */
+        }
+        
+        
+        .about {
+            max-width: 100%; /* Allow the text to wrap within the container */
+            word-wrap: break-word; /* Ensure long words wrap instead of overflowing */
+        }
+        
+        
+    </style>
+    
+</head>
 <body>
     <div class="container">
         <div class="left-div">
@@ -131,13 +173,21 @@
         <div class="right-div">
             <!-- Content for right div -->
             <div class="info-container">
-                <h2>User Information:</h2>
+                <h2>User Information: <button id="editSaveButton">Edit</button></h2> 
                 <p>
                     <strong class="infotext">Username:</strong> <br><span id="username" class="info"></span><br><br>
                     <strong class="infotext">Role:</strong> <br><span id="role" class="info"></span><br><br>
-                    <strong class="infotext">Fullname:</strong> <br><span id="fullname" class="info"></span><br><br>
-                    <strong class="infotext">Address:</strong> <br><span id="address" class="info"></span><br><br>
-                    <strong class="infotext">About:</strong> <br><span id="about" class="info"></span><br><br>
+
+                    <strong class="infotext">Fullname:</strong><br>
+                    <span id="fullname" class="info"> </span><br><br>
+
+                    <strong class="infotext">Address:</strong><br>
+                    <span id="address" class="info"> </span><br><br>
+
+                    <strong class="infotext">About:</strong><br>
+                    <span id="about" class="info about"></span><br><br>
+
+                    <br><br>
                 </p>
             </div>
             <div class="info-container-r">
@@ -150,59 +200,127 @@
         </div>
     </div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Retrieve user_id from local storage
-        var user_id = localStorage.getItem('user_id');
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Retrieve user_id from local storage
+            var user_id = localStorage.getItem('user_id');
 
-        // Fetch user role and username from the server
-        fetchUserInfo(user_id);
+            // Fetch user role and username from the server
+            fetchUserInfo(user_id);
 
-        function fetchUserInfo(user_id) {
-            fetch('https://courtify.onrender.com/userinfo/' + user_id) // Assuming your server endpoint is /userinfo/:user_id
-                .then(response => response.json())
-                .then(data => {
-                    if (data.role === 'admin') {
-                        document.getElementById('dashboardLink').style.display = 'block';
-                        document.getElementById('customerdetailsLink').style.display = 'block';
-                        document.getElementById('ownerdetailsLink').style.display = 'block';
-                        document.getElementById('courtdetailsLink').style.display = 'block';
-                        document.getElementById('role').innerText = "Administrator";
-                    }
-                    else if (data.role === 'owner') {
-                        document.getElementById('courtlistingLink').style.display = 'block';
-                        document.getElementById('addcourtLink').style.display = 'block';
-                        document.getElementById('role').innerText = "Court Owner";
-                    }
-                    else if (data.role === 'customer') {
-                        document.getElementById('courtbookingLink').style.display = 'block';
-                        document.getElementById('role').innerText = "Customer";
-                    }
+            function fetchUserInfo(user_id) {
+                fetch('https://courtify.onrender.com/userinfo/' + user_id) // Assuming your server endpoint is /userinfo/:user_id
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.role === 'admin') {
+                            document.getElementById('dashboardLink').style.display = 'block';
+                            document.getElementById('customerdetailsLink').style.display = 'block';
+                            document.getElementById('ownerdetailsLink').style.display = 'block';
+                            document.getElementById('courtdetailsLink').style.display = 'block';
+                            document.getElementById('role').innerText = "Administrator";
+                        }
+                        else if (data.role === 'owner') {
+                            document.getElementById('courtlistingLink').style.display = 'block';
+                            document.getElementById('addcourtLink').style.display = 'block';
+                            document.getElementById('role').innerText = "Court Owner";
+                        }
+                        else if (data.role === 'customer') {
+                            document.getElementById('courtbookingLink').style.display = 'block';
+                            document.getElementById('role').innerText = "Customer";
+                        }
 
-                    document.getElementById('username').innerText = data.username;
-                    document.getElementById('fullname').innerText = data.fullname;
-                    document.getElementById('address').innerText = data.address;
-                    document.getElementById('about').innerText = data.about;
-                    document.getElementById('profile').src = "/img/" + data.photo;
-                    document.getElementById('joinDate').innerText = "Joined " + data.join_date; // Add "Joined" text
-                })
-                .catch(error => console.error('Error fetching user info:', error));
-        }
-        document.getElementById('logout').addEventListener('click', function(event) {
-            // Prevent the default behavior of the link
-            event.preventDefault();
-
-            // Show a confirmation dialog
-            var confirmation = confirm("Are you sure you want to logout?");
-            if (confirmation) {
-                // Clear localStorage
-                localStorage.clear();
-                
-                // Redirect to the logout page
-                window.location.href = "index.html";
+                        document.getElementById('username').innerText = data.username;
+                        document.getElementById('fullname').innerText = data.fullname;
+                        document.getElementById('address').innerText = data.address;
+                        document.getElementById('about').innerText = data.about;
+                        document.getElementById('profile').src = "/img/" + data.photo;
+                        document.getElementById('joinDate').innerText = "Joined " + data.join_date; // Add "Joined" text
+                    })
+                    .catch(error => console.error('Error fetching user info:', error));
             }
+
+            // Edit/Save Button Functionality
+            document.getElementById('editSaveButton').addEventListener('click', function() {
+                var button = document.getElementById('editSaveButton');
+                var isEditing = button.innerText === 'Edit';
+                        
+                var userId = localStorage.getItem('user_id'); // Retrieve user ID from local storage
+                        
+                var fullnameSpan = document.getElementById('fullname');
+                var addressSpan = document.getElementById('address');
+                var aboutSpan = document.getElementById('about');
+                        
+                if (isEditing) {
+                    // Replace spans with input fields
+                    fullnameSpan.innerHTML = '<input type="text" id="editFullnameInput" value="' + fullnameSpan.innerText + '">';
+                    addressSpan.innerHTML = '<input type="text" id="editAddressInput" value="' + addressSpan.innerText + '">';
+                    aboutSpan.innerHTML = '<input type="text" id="editAboutInput" value="' + aboutSpan.innerText + '">';
+                        
+                    // Change button text to "Save"
+                    button.innerText = 'Save';
+                } else {
+                    // Log updated values
+                    var fullname = document.getElementById('editFullnameInput').value;
+                    var address = document.getElementById('editAddressInput').value;
+                    var about = document.getElementById('editAboutInput').value;
+                        
+                    // Check if all fields are filled
+                    if (!fullname || !address || !about) {
+                        alert('Please fill in all fields to update.');
+                        return; // Exit the function if any field is empty
+                    }
+                        
+                    // Prepare data for updating
+                    var userData = {
+                        user_id: userId, // Include user ID in the data
+                        fullname: fullname,
+                        address: address,
+                        about: about
+                    };
+
+                    // Send AJAX request to update user information
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('POST', 'https://courtify.onrender.com/api/update/' + userId, true); // Include user ID in the URL
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === 4) {
+                            if (xhr.status === 200) {
+                                // Update successful
+                                alert('User information updated successfully!');
+                            } else {
+                                // Update failed
+                                alert('Failed to update user information. Please try again.');
+                            }
+                        }
+                    };
+                    xhr.send(JSON.stringify(userData));
+                        
+                    // Replace input fields with updated values
+                    fullnameSpan.innerText = fullname;
+                    addressSpan.innerText = address;
+                    aboutSpan.innerHTML = about;
+                        
+                    // Change button text back to "Edit"
+                    button.innerText = 'Edit';
+                }
+            });
+
+            
+            document.getElementById('logout').addEventListener('click', function(event) {
+                // Prevent the default behavior of the link
+                event.preventDefault();
+
+                // Show a confirmation dialog
+                var confirmation = confirm("Are you sure you want to logout?");
+                if (confirmation) {
+                    // Clear localStorage
+                    localStorage.clear();
+                    
+                    // Redirect to the logout page
+                    window.location.href = "index.html";
+                }
+            });
         });
-    });
-</script>
+    </script>
 </body>
 </html>

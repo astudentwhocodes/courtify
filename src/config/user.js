@@ -140,4 +140,50 @@ router.get('/user/owner', async (req, res) => {
     }
 });
 
+router.post('/update/:user_id', async (req, res) => {
+    const userId = req.params.user_id; // Retrieve user ID from URL parameters
+    const fullname = req.body.fullname;
+    const address = req.body.address;
+    const about = req.body.about;
+
+    if (!userId || (!fullname && !address && !about)) {
+        return res.status(400).json({ error: 'User ID and at least one field to update are required.' });
+    }
+
+    try {
+        const connection = await pool.getConnection();
+        let query = 'UPDATE user_tb SET';
+        const values = [];
+
+        if (fullname) {
+            query += ' fullname = ?,';
+            values.push(fullname);
+        }
+
+        if (address) {
+            query += ' address = ?,';
+            values.push(address);
+        }
+
+        if (about) {
+            query += ' about = ?,';
+            values.push(about);
+        }
+
+        // Remove the trailing comma and add the WHERE clause
+        query = query.slice(0, -1) + ' WHERE user_id = ?';
+        values.push(userId);
+
+        // Execute the query
+        await connection.execute(query, values);
+        connection.release();
+
+        return res.status(200).json({ message: 'User information updated successfully.' });
+    } catch (error) {
+        console.error('Error updating user information:', error);
+        return res.status(500).json({ error: 'Internal server error.' });
+    }
+});
+
+
 module.exports = router;

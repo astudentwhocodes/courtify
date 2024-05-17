@@ -48,14 +48,15 @@
         // Get input values
         var username = document.getElementById("username").value;
         var email = document.getElementById("email").value;
-		if (!email.includes("@") || !email.endsWith(".com")) {
+    
+        // Validate email format
+        if (!isValidEmail(email)) {
             alert("Please enter a valid email address.");
             return;
         }
-		
+    
         var password = document.getElementById("password").value;
         var role = document.querySelector('input[name="role"]:checked').value;
-
         // Get current date
         const today = new Date();
         const monthNames = ["January", "February", "March", "April", "May", "June",
@@ -65,12 +66,12 @@
         const day = String(today.getDate()).padStart(2, '0');
         const year = today.getFullYear();
         const joinDate = `${monthName} ${day} ${year}`;
-		
-		var confirmation = confirm("Are you sure you want to sign up?");
+    
+        var confirmation = confirm("Are you sure you want to sign up?");
         if (!confirmation) {
             return; // Do nothing if user cancels
         }
-
+    
         // Send AJAX request to server
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "https://courtify.onrender.com/api/signup", true); // Change URL to localhost and port 3000
@@ -89,9 +90,28 @@
         var data = "username=" + encodeURIComponent(username) + "&email=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(password) + "&role=" + encodeURIComponent(role) + "&join_date=" + encodeURIComponent(joinDate);
         xhr.send(data);
     });
+    
+    function isValidEmail(email) {
+        // Split the email at '@' and check if the part before '@' has at least 3 characters
+        var parts = email.split('@');
+        if (parts.length !== 2 || parts[0].length < 3) {
+            return false;
+        }
+        
+        // Check if the second part contains a dot (.)
+        if (!parts[1].includes('.')) {
+            return false;
+        }
+        
+        // Check if the second part ends with ".com"
+        var domainParts = parts[1].split('.');
+        if (domainParts.length < 2 || domainParts[domainParts.length - 1] !== 'com') {
+            return false;
+        }
+        
+        return true;
+    }
+    
 </script>
-
-
-
 </body>
 </html>
