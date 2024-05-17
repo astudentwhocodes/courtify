@@ -78,7 +78,7 @@ body, html {
     width: calc(33% - 20px); /* Set the width of each card (33% - 20px margin) */
     margin-bottom: 20px;
     border-radius: 15px; /* Add border-radius to create a rounded corner */
-    max-width: 300px;
+    max-width: 100%;
     overflow: hidden; /* This ensures that the border-radius applies correctly */
     padding: 20px;
     margin-right: 20px; /* Add some margin to create space between cards */
@@ -91,13 +91,27 @@ body, html {
 }
 
 /* Court image styles */
+/* Style for the court image container */
+.court-card .img-container {
+    position: relative; /* Set position to relative for absolute positioning */
+    width: 70%; /* Make the container fill the width of its parent */
+    padding-top: 50%; /* 16:9 aspect ratio (9 / 16 * 100) */
+    overflow: hidden; /* Hide any content that overflows the container */
+    border-radius: 15px; /* Rounded corners */
+}
+
+/* Style for the court image */
 .court-card img {
-    width: 70%; /* Make the image fill the width of its container */
-    height: 60%; /* Make the height of the image fill the container */
+    position: absolute; /* Set position to absolute */
+    top: 0; /* Position from the top of the container */
+    left: 0; /* Position from the left of the container */
+    width: 100%; /* Make the image fill the width of its container */
+    height: 100%; /* Make the height of the image fill the container */
     object-fit: cover; /* Maintain aspect ratio and cover the entire space */
-    border-radius: 15px; /* Rounded corners only on top */
+    border-radius: 15px; /* Rounded corners */
     box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1); /* Add a slight shadow for depth */
 }
+
 
 /* Court details styles */
 .court-details {
@@ -227,8 +241,8 @@ body, html {
 
 .court-info {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center; /* Center horizontally */
     text-align: left; /* Center text */
     border-radius: 10px; /* Rounded corners */
     box-shadow: 0 0px 4px rgba(0, 0, 0, 0.1); /* Slight shadow */
@@ -236,7 +250,12 @@ body, html {
     margin-bottom: 25px;
 }
 
-.back-to-court-button {
+.court-info-container {
+    display: flex;
+    align-items: center;
+}
+
+.back-to-court-button, .delete-court-button {
     background-color: #f0680c; /* Orange color for the button */
     color: white; /* White text color */
     width: 150px; /* Adjust width as needed */
@@ -302,4 +321,14 @@ body, html {
     width: 35px; /* Adjust icon size */
     height: 35px;
     margin-right: 10px; /* Adjust spacing between icon and text */
+}
+
+.court-button {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Align items to the right */
+}
+
+.court-button button {
+    margin-bottom: 5px;
 }

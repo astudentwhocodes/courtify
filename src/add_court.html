@@ -45,7 +45,8 @@
                     <label for="courtAddress">Court Address:</label><br>
                     <input type="text" id="courtAddress" name="courtAddress" placeholder="Enter court address" required><br>
                     <label for="courtPrice">Court Price:</label><br>
-                    <input type="text" id="courtPrice" name="courtPrice" placeholder="Enter price" required><br>
+                    <input type="text" id="courtPrice" name="courtPrice" placeholder="Enter price" pattern="[0-9]+" title="Please enter a proper price" required><br>
+
                     <!-- About field -->
                     <label for="about">About:</label><br>
                     <textarea id="about" name="about" rows="4" cols="50" class="about" placeholder="Add court description"></textarea><br>

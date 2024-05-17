@@ -73,7 +73,9 @@
                             const courtDiv = document.createElement('div');
                             courtDiv.classList.add('court-card');
                             courtDiv.innerHTML = `
-                                <img src="https://storage.googleapis.com/courtify-ed05a.appspot.com/courts/${court.photo || court.id + '.png'}" alt="${court.court_name}" data-court-id="${court.court_id}">
+                                <div class="img-container">
+                                    <img src="https://storage.googleapis.com/courtify-ed05a.appspot.com/courts/${court.photo || court.id + '.png'}" alt="${court.court_name}" data-court-id="${court.court_id}">
+                                </div>
                                 <div class="court-details">
                                     <p class="address">${court.address}</p>
                                     <p class="price">₱${court.price}</p>
@@ -81,18 +83,19 @@
                             `;
                             courtList.appendChild(courtDiv);
                         });
-        
+
                         // Add event listener to all court card images
                         const courtCards = document.querySelectorAll('.court-card img');
                         courtCards.forEach(courtImg => {
                             courtImg.addEventListener('click', function() {
                                 const courtId = this.dataset.courtId; // Retrieve court ID from data attribute
                                 localStorage.setItem('court_id', courtId); // Store court ID in localStorage
-                                window.location.href = "court.html"; // Redirect to book_court.html
+                                window.location.href = "court.html"; // Redirect to court.html
                             });
                         });
                     })
                     .catch(error => console.error('Error fetching court information:', error));
+
             }
 
             document.getElementById('logout').addEventListener('click', function(event) {

@@ -4,10 +4,12 @@ body, html {
     font-family: Arial, sans-serif;
     background-color: #fff5e6;
 }
+
 .container {
     display: flex;
     height: 100%;
 }
+
 .left-div {
     flex: 1;
     background-color: #ffebcf;
@@ -18,6 +20,7 @@ body, html {
     overflow: hidden;
     margin-right: 0px;
 }
+
 .right-div {
     flex: 4;
     background-color: #fff5e6;
@@ -29,6 +32,7 @@ body, html {
     border: 1px solid black;
     border-left: 0;
 }
+
 .header {
     background-color: #fff5e6;
     color: black;
@@ -36,19 +40,23 @@ body, html {
     padding-left: 0px;
     font-size: 35px;
 }
+
 .body {
     margin-top: 20px;
 }
+
 .navigation {
     list-style: none;
     padding: 0;
     display: inline-block; 
     border-radius: 10px;
 }
+
 .navigation li {
     margin-bottom: 10px;
     border-radius: 10px;
 }
+
 .info-div {
     flex: 3;
     margin-right: 10px;
@@ -63,6 +71,7 @@ body, html {
     border-radius: 20px; /* Add curves */
     overflow: hidden; /* Ensure image stays within curved border */
 }
+
 #courtName {
     font-size: 30px;
     margin-top: 10px;
@@ -102,6 +111,7 @@ body, html {
     height: 35px;
     margin-right: 10px; /* Adjust spacing between icon and text */
 }
+
 .owner-na {
     height: 35px;
     display: flex;
@@ -116,8 +126,8 @@ body, html {
 
 .time-list-open,
 .time-list-closed {
-display: flex;
-flex-wrap: wrap;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .time-slot {
@@ -188,12 +198,14 @@ flex-wrap: wrap;
 .booking-final {
     margin-top: 100px;
 }
+
 .breaking-line {
     height: 2px; /* Adjust the height as needed */
     background-color: black; /* Color of the line */
     margin: 10px 0; /* Margin to provide spacing */
     margin-bottom: 25px;
 }
+
 .booking-price {
     display: flex;
     justify-content: space-between;
@@ -219,16 +231,16 @@ flex-wrap: wrap;
     height: 100%;
     overflow: auto; /* Enable scroll if needed */
     background-color: rgba(0, 0, 0, 0.4); /* Black with opacity */
+    border-radius: 20px; /* Add curves to the modal */
 }
 
 /* Modal Content */
 .modal-content {
     background-color: #ffebcf;
-    margin: 0 auto; /* Center the modal horizontally */
-    margin-top: 10%; /* Adjust vertical position */
+    margin: 10% auto; /* Center the modal horizontally and position it slightly from the top */
     padding: 20px;
     border: 1px solid #888;
-    width: 15%; /* Set width of modal */
+    width: 200px; /* Set width of modal */
     max-height: 300px; /* Set maximum height */
     overflow-y: auto; /* Enable vertical scroll if content exceeds max-height */
 }
@@ -237,6 +249,7 @@ flex-wrap: wrap;
 #checkbox-list {
     max-height: calc(100% - 50px); /* Adjust height for scrollbar */
     overflow-y: auto; /* Enable vertical scroll if content exceeds max-height */
+    padding-left: 15px;
 }
 
 /* Close Button */
@@ -256,8 +269,41 @@ flex-wrap: wrap;
 
 /* Add this style for the checkbox container */
 #checkbox-container {
-    display: flex;
-    flex-direction: column;
+    display: block;
+    margin-top: 10px; /* Add some top margin to space out the checkboxes */
+}
+
+/* Style for the checkbox input */
+#checkbox-container input[type="checkbox"] {
+    display: none; /* Hide the default checkbox */
+}
+
+/* Style for the checkbox label */
+#checkbox-container label {
+    display: block; /* Display the label as block element */
+    margin-bottom: 5px; /* Add some bottom margin to space out the labels */
+    position: relative; /* Position relative to allow for pseudo-element */
+    cursor: pointer; /* Add cursor pointer */
+    padding-left: 70px; /* Add padding to the left */
+}
+
+
+/* Style for the custom checkbox */
+#checkbox-container label::before {
+    content: ""; /* Empty content */
+    position: absolute; /* Position absolutely relative to the label */
+    top: 50%; /* Move to the middle vertically */
+    left: 0; /* Move to the left */
+    transform: translateY(-50%); /* Center the pseudo-element vertically */
+    width: 20px; /* Set width of the checkbox */
+    height: 20px; /* Set height of the checkbox */
+    background-color: #ccc; /* Set background color of the checkbox */
+    border-radius: 3px; /* Add border radius */
+}
+
+/* Show the custom checkbox when the input is checked */
+#checkbox-container input[type="checkbox"]:checked + label::before {
+    background-color: #f0680c; /* Change background color when checked */
 }
 
 /* Add this style for the labels */
@@ -266,7 +312,6 @@ label {
     display: flex;
     align-items: center; /* Align labels vertically with checkboxes */
 }
-
 
 #openModalBtn {
     background-color: #f0680c; /* Orange color for the button */
@@ -279,4 +324,16 @@ label {
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Add shadow */
     margin-left: auto; /* Align the button to the right */
     margin-top: 10px; /* Add some top margin */
+}
+
+/* Modal Confirmation Button */
+#confirmationButton {
+    width: 100%; /* Stretch the button to full width */
+    padding: 10px; /* Add padding */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Add border radius */
+    background-color: #f0680c; /* Button background color */
+    color: white; /* Text color */
+    cursor: pointer; /* Add cursor pointer on hover */
+    margin-top: 20px; /* Add top margin */
 }

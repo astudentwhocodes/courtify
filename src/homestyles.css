@@ -69,13 +69,24 @@ body, html {
     padding: 20px;
     margin-bottom: 50px;
 }
-
+/* Style for the court image container */
 /* Style for the court image */
+.court-card .img-container {
+    position: relative; /* Set position to relative for absolute positioning */
+    width: 100%; /* Make the container fill the width of its parent */
+    padding-top: 70%; /* 16:9 aspect ratio (9 / 16 * 100) */
+    overflow: hidden; /* Hide any content that overflows the container */
+    border-radius: 15px; /* Rounded corners */
+}
+
 .court-card img {
+    position: absolute; /* Set position to absolute */
+    top: 0; /* Position from the top of the container */
+    left: 0; /* Position from the left of the container */
     width: 100%; /* Make the image fill the width of its container */
-    height: 80%; /* Make the height of the image fill the container */
+    height: 100%; /* Make the height of the image fill the container */
     object-fit: cover; /* Maintain aspect ratio and cover the entire space */
-    border-radius: 15px; /* Rounded corners only on top */
+    border-radius: 15px; /* Rounded corners */
     box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1); /* Add a slight shadow for depth */
 }
 
